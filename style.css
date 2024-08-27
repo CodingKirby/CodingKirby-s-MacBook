@@ -1,0 +1,400 @@
+/* 기본 스타일 초기화 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+@font-face {
+    font-family: 'MacSystemFont';
+    src: url('./fonts/AppleSDGothicNeoM.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: -apple-system, MacSystemFont, Arial, sans-serif;
+    background-image: url('./img/background.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+a {
+    color: inherit; /* 부모 요소의 색상 상속 */
+    text-decoration: none; /* 링크 밑줄 제거 */
+}
+
+/* MacOS Status Bar */
+.macos-statusbar {
+    background-color: rgba(245, 245, 247, 0.8); /* Light grey with 80% opacity */
+    height: 2rem;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    z-index: 1001;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.macos-statusbar .left-section,
+.macos-statusbar .right-section {
+    display: flex;
+    align-items: center;
+}
+
+.macos-statusbar .menu-item {
+    margin: 0 8px;
+    color: #000;
+    cursor: pointer;
+}
+
+.macos-statusbar .apple-logo {
+    font-size: 1.5rem;
+    margin-right: 12px;
+    cursor: pointer;
+}
+
+.macos-statusbar .right-section .menu-item {
+    color: #000;
+}
+
+.macos-statusbar .right-section .menu-item i {
+    margin-right: 5px;
+}
+
+/* 컨테이너 스타일 */
+.container {
+    position: absolute;
+    top: 5rem; /* 상단에서 5rem 떨어지도록 설정 */
+    left: 50%; /* 수평 중앙에 배치 */
+    transform: translateX(-50%); /* 수평으로 정확히 중앙에 오도록 조정 */
+    width: calc(70% - 4rem);
+    min-width: 30%;
+    min-height: 30%;
+    max-width: 90%;
+    max-height: 80%;
+    text-align: center;
+    background-color: #ffffff;
+    color: #333;
+    z-index: 1;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    resize: both; /* 크기 조절 가능 */
+}
+
+/* transition을 적용할 때 사용하는 클래스 */
+.container.transition {
+    transition: all 0.5s ease-in-out; /* 애니메이션 적용 */
+}
+
+/* 콘텐츠 영역 스타일 */
+.content {
+    overflow: auto; /* 스크롤 가능한 영역 */
+    height: calc(100% - 3rem); /* 상단바를 제외한 전체 높이 설정 */
+    padding: 1rem; /* 콘텐츠 영역에 패딩 추가 */
+}
+
+/* 헤더 스타일 */
+header {
+    margin-top: 5rem;
+    margin-bottom: 3rem;
+}
+
+header h1 {
+    font-size: 3em;
+    margin-bottom: 20px;
+}
+
+header p {
+    font-size: 1.2em;
+    line-height: 1.5;
+    color: #555;
+}
+
+/* 프로젝트 섹션 스타일 */
+.projects {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 2rem;
+    gap: 2rem;
+}
+
+.project {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    background-color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    width: 300px;
+    padding: 1rem;
+    transition: transform 0.3s ease;
+    height: 400px; /* Set a fixed height for the entire project box */
+    box-sizing: border-box;
+}
+
+.project:hover {
+    transform: translateY(-10px);
+}
+
+.img-container {
+    width: 100%;
+    height: 150px; /* Set a fixed height for the image container */
+    overflow: hidden;
+    border-radius: 15px;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.img-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 15px;
+    transition: transform 0.5s ease;
+}
+
+.project:hover .img-container img {
+    transform: scale(1.05);
+}
+
+.project h2, 
+.project span {
+    flex: none; /* Remove flex-grow behavior */
+    margin-bottom: 0.5rem;
+    padding: 0 0.5rem 0 0.5rem;
+    text-align: left;
+    height: 2rem; /* Set a fixed height */
+    line-height: 2rem; /* Center text vertically */
+    width: 100%; /* Ensure the text takes up the full width */
+}
+
+.project button {
+    width: 100%;
+    background-color: #000;
+    color: #fff;
+    border: none;
+    padding: 0.8rem 2rem;
+    font-size: 1em;
+    cursor: pointer;
+    border-radius: 25px;
+    transition: background-color 0.3s ease;
+    margin-top: auto; /* Push the button to the bottom */
+}
+
+.project button:hover {
+    background-color: #333;
+}
+
+/* MacOS 윈도우 스타일의 상단바 */
+.macos-titlebar {
+    background-color: #f2f2f7;
+    height: 3rem;
+    border-bottom: 1px solid #d6d6d6;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0 10px;
+    cursor: pointer;
+    position: relative; /* 상단바를 고정하여 스크롤 영향 받지 않게 함 */
+    z-index: 2; /* 스크롤 콘텐츠 위에 위치 */
+    gap: 1rem;
+}
+
+.macos-titlebar .title {
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+.macos-titlebar:active {
+    cursor: grabbing;
+}
+
+.macos-titlebar .traffic-lights {
+    display: flex;
+    gap: 0.5rem;
+    margin-left: 0.5rem;
+}
+
+.macos-titlebar .traffic-lights span {
+    position: relative;
+    display: inline-block;
+    width: 1rem;   /* 원의 실제 크기 */
+    height: 1rem;  /* 원의 실제 크기 */
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.macos-titlebar .traffic-lights span::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 2rem;  /* 클릭 가능한 영역 확장 */
+    height: 2rem; /* 클릭 가능한 영역 확장 */
+    border-radius: 50%;
+    z-index: 0;
+}
+
+.macos-titlebar .traffic-lights .close {
+    background-color: #ff605c;
+}
+
+.macos-titlebar .traffic-lights .minimize {
+    background-color: #ffbd44;
+}
+
+.macos-titlebar .traffic-lights .fullscreen {
+    background-color: #00ca4e;
+}
+
+/* 하단 도커 스타일 */
+.dock {
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+    position: fixed;
+    left: 50%;
+    bottom: 2rem;
+    height: 6rem;
+    width: calc(85%);
+    transform: translateX(-50%);
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(10px);
+    border-radius: 1rem;
+    padding: 1rem 2rem;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+}
+
+.dock::after {
+    content: "";
+    position: absolute;
+    right: 15rem;
+    transform: translateX(-50%);
+    width: 1px;
+    height: 80%;
+    background-color: rgba(0, 0, 0, 0.3); /* Adjust color and opacity */
+}
+
+.dock-items-left,
+.dock-items-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.dock-item,
+.minimized-container {
+    width: 4rem;
+    height: 4rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.3s ease;
+    font-size: 2rem; /* 아이콘 크기 조정 */
+    color: #111; /* 아이콘 색상 */
+    border-radius: 1.5rem;
+    cursor: pointer;
+}
+
+.dock-item {
+    position: relative;
+    width: 4rem;
+    height: 4rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.3s ease;
+    font-size: 2rem;
+    cursor: pointer;
+}
+
+.dock-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 1rem;
+}
+
+.dock-item i, 
+.minimized-container i {
+    display: flex; /* 아이콘을 flex 요소로 설정 */
+    justify-content: center; /* 중앙 정렬 */
+    align-items: center; /* 중앙 정렬 */
+    width: 100%; /* 부모의 전체 너비 */
+    height: 100%; /* 부모의 전체 높이 */
+}
+
+.dock-item:hover, 
+.minimized-container:hover {
+    transform: scale(1.2);
+}
+
+.minimized-container {
+    height: 4rem;
+    width: 6rem;
+    background-image: url('./img/minimize.JPG');
+    background-size: cover;
+    border-radius: 0.5rem;
+}
+
+.active-indicator {
+    position: absolute;
+    bottom: -0.8rem; /* Position the indicator at the bottom of the dock */
+    left: 50%;
+    transform: translateX(-50%); /* Center the indicator horizontally */
+    width: 0.5rem;
+    height: 0.5rem;
+    background-color: transparent;
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+/* Set initial visibility and color for certain indicators */
+.dock-item.active .active-indicator,
+#finder-indicator, #safari-indicator, #music-indicator {
+    background-color: rgba(0, 0, 0, 0.6);
+    opacity: 1;
+}
+
+/* Prevent the indicator from showing on hover */
+.dock-item:hover #finder-indicator,
+.dock-item:hover #safari-indicator,
+.dock-item:hover #music-indicator,
+.dock-item:hover .active-indicator {
+    opacity: 0;
+}
+
+.popup {
+    position: fixed;
+    bottom: 10rem; /* 도커의 위에 위치하도록 설정 (도커 높이 + 여유 공간) */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1rem;
+    z-index: 1000;
+}

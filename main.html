@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>김정현의 포트폴리오</title>
+    <link rel="icon" href="./img/apple.png" type="image/x-icon">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <!-- jQuery 라이브러리 추가 -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+    
+<body>
+    <!-- 배경 음악 추가 -->
+    <audio id="background-music" autoplay loop>
+        <source src="./mp3/1.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- MacOS Status Bar -->
+    <div class="macos-statusbar">
+        <div class="left-section">
+            <span class="apple-logo"><i class="fa-brands fa-apple"></i></span>
+            <span class="menu-item">Finder</span>
+            <span class="menu-item">File</span>
+            <span class="menu-item">Edit</span>
+            <span class="menu-item">View</span>
+            <span class="menu-item">Go</span>
+            <span class="menu-item">Window</span>
+            <span class="menu-item">Help</span>
+        </div>
+        <div class="right-section">
+            <span class="menu-item"><i class="fas fa-wifi"></i></span>
+            <span class="menu-item"><i class="fas fa-battery-three-quarters"></i></span>
+            <span class="menu-item"></span>
+        </div>
+    </div>
+
+    <div id="projects-container" class="container">
+        <div class="macos-titlebar">
+            <div class="traffic-lights">
+                <span class="close"></span>
+                <span class="minimize"></span>
+                <span class="fullscreen"></span>
+            </div>
+            <span class="title">Protfolio</span>
+        </div>
+        <div class="content">
+            <header>
+                <h1>김정현의 포트폴리오</h1>
+                <p>안녕하세요, 늘 고민하는 개발자 김정현입니다.<br>제 프로젝트들을 소개합니다.</p>
+            </header>
+    
+            <div class="projects">
+                <div class="project">
+                    <div class="img-container">
+                        <img src="./img/sproutfarm.png">
+                    </div>
+                    <h2>SproutFarm</h2>
+                    <h2>새싹 농장🌱</h2>
+                    <span>캐주얼 픽셀 미니게임</span>
+                    <button onclick="window.open('https://codingkirby.github.io/SproutFarm/', '_blank')">자세히 보러가기</button>
+                </div>
+                <div class="project">
+                    <div class="img-container">
+                        <img src="./img/purrfectday.png">
+                    </div>
+                    <h2>PurrFectDay.</h2>
+                    <h2>퍼펙데이.</h2>
+                    <span>고양이와 함께 나만의 방을 만들어가는 귀여운 투두리스트😻</span>
+                    <button onclick="window.open('https://codingkirby.github.io/projects/PurrFectDay', '_blank')">자세히 보러가기</button>
+                </div>
+                <div class="project">
+                    <div class="img-container">
+                        <img src="./img/chatbuddy.png">
+                    </div>
+                    <h2>CHATBuddy</h2>
+                    <h2>챗벗👀</h2>
+                    <span>우울감을 지닌 청년들을 위한 AI 채팅 서비스</span>
+                    <button onclick="window.open('https://codingkirby.github.io/projects/CHATBuddy', '_blank')">자세히 보러가기</button>
+                </div>
+            </div>
+        </div>
+    </div>    
+
+    <div class="dock">
+        <div class="dock-items-left">
+            <div class="dock-item">
+                <!-- <i class="fas fa-folder"></i> -->
+                <img src="./img/finder.png">
+                <div class="active-indicator" id="finder-indicator"></div>
+            </div>
+            <div class="dock-item">
+                <!-- <i class="fas fa-music"></i> -->
+                <img src="./img/music.png">
+                <div class="active-indicator" id="music-indicator"></div>
+            </div>
+            <div class="dock-item">
+                <!-- <i class="fas fa-image"></i> -->
+                <img src="./img/photos.png">
+                <div class="active-indicator" id="photos-indicator"></div>
+            </div>
+            <div class="dock-item">
+                <!-- <i class="fas fa-message"></i> -->
+                <img src="./img/messages.png">
+                <div class="active-indicator" id="messages-indicator"></div>
+            </div>
+            <div class="dock-item">
+                <img src="./img/memo.png">
+                <div class="active-indicator" id="memo-indicator"></div>
+            </div>
+            
+            <div class="dock-item">
+                <!-- <i class="fa-brands fa-safari"></i> -->
+                <img src="./img/safari.png">
+                <div class="active-indicator" id="safari-indicator"></div>
+            </div>
+
+            <a href="https://github.com/CodingKirby" target="_blank">                
+                <div class="dock-item">
+                    <!-- <i class="fa-brands fa-github"></i> -->
+                    <img src="./img/github.png">
+                    <!--<div class="active-indicator" id="github-indicator"></div>-->
+                </div>
+            </a>
+            <a href="https://codingkirby.github.io/" target="_blank">
+                <div class="dock-item">
+                    <!-- <i class="fa-brands fa-blogger"></i> -->
+                    <img src="./img/blog.png">
+                    <!--<div class="active-indicator" id="blog-indicator"></div>-->
+                </div>
+            </a>
+            <a href="https://www.notion.so/fa53b7759bd94f0a8005cbd6f9a1ff85" target="_blank">
+                <div class="dock-item">
+                    <img src="./img/notion.png">
+                    <!--<div class="active-indicator" id="notion-indicator"></div>-->
+                </div>
+            </a>
+
+            <a href="mailto:codingkirby0@example.com">
+                <div class="dock-item">
+                    <!-- <i class="fas fa-envelope"></i> -->
+                    <img src="./img/email.png">
+                    <!--<div class="active-indicator" id="email-indicator"></div>-->
+                </div>
+            </a>
+            <div class="dock-item" onclick="copyLinkAndShowPopup()">
+                <!-- <i class="fa-solid fa-arrow-up-from-bracket"></i> -->
+                <img src="./img/share.png">
+                <!--<div class="active-indicator" id="share-indicator"></div>-->
+            </div>
+            
+            <div class="dock-item">
+                <!-- <i class="fas fa-cog"></i> -->
+                <img src="./img/settings.png">
+                <div class="active-indicator" id="settings-indicator"></div>
+            </div>
+            
+        </div>
+        <div class="dock-items-right">
+            <div class="dock-item minimized-container" style="display: none;"></div>
+            <div class="dock-item">
+                <!-- <i class="fas fa-trash"></i> -->
+                <img src="./img/bin.png">
+            </div>
+        </div>
+    </div>
+
+    <div id="popup" class="popup" style="display: none;">
+        링크가 복사되었습니다!
+    </div>
+
+    <!-- 스크립트 추가 -->
+    <script src="./script.js"></script>
+</body>
+</html>
