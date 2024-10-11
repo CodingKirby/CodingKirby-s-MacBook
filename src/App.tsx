@@ -1,5 +1,4 @@
 import React from 'react';
-import { EnvProvider } from './contexts/EnvContext';
 import StatusBar from './components/common/StatusBar';
 import Safari from './components/apps/Safari';
 import { MusicPlayer } from './components/apps/MusicPlayer';
@@ -11,8 +10,7 @@ const mp3Url = `${process.env.REACT_APP_MUSIC_URL}`;
 
 const App: React.FC = () => {
   return (
-    <EnvProvider>
-      <div className="App">
+    <div className="App">
         <audio id="background-music" autoPlay loop>
           <source src={`${mp3Url}/1.mp3`} type="audio/mp3" />
         </audio>
@@ -20,8 +18,7 @@ const App: React.FC = () => {
         <Safari />
         <MusicPlayer />
         <Dock />
-      </div>
-    </EnvProvider>
+    </div>
   );
 };
 
