@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import '../../styles/Statusbar.css';
 
 const StatusBar: React.FC = () => {
   const [time, setTime] = useState<string>('');

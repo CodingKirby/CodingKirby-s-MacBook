@@ -1,4 +1,5 @@
 import React from 'react';
+import MacOSTitlebar from '../common/MacOSTitlebar';
 
 const Safari: React.FC = () => {
   const imageUrl = `${process.env.REACT_APP_IMAGE_URL}`;
@@ -28,35 +29,25 @@ const Safari: React.FC = () => {
   ];
 
   return (
-    <div id="projects-container" className="container">
-      <div className="macos-titlebar">
-        <div className="traffic-lights">
-          <span className="close"></span>
-          <span className="minimize"></span>
-          <span className="fullscreen"></span>
-        </div>
-        <span className="title">Portfolio</span>
-      </div>
-      <div className="content">
-        <header>
-          <h1>김정현의 포트폴리오</h1>
-          <p>안녕하세요, 늘 고민하는 개발자 김정현입니다.<br />제 프로젝트들을 소개합니다.</p>
-        </header>
-        <div className="projects">
-          {projects.map((project, index) => (
-            <div key={index} className="project">
-              <div className="img-container">
-                <img src={project.imgSrc} alt={project.title} />
-              </div>
-              <h2>{project.title}</h2>
-              <h2>{project.subtitle}</h2>
-              <span>{project.description}</span>
-              <button onClick={() => window.open(project.link, '_blank')}>자세히 보러가기</button>
+    <MacOSTitlebar title="Portfolio">
+      <header>
+        <h1>김정현의 포트폴리오</h1>
+        <p>안녕하세요, 늘 고민하는 개발자 김정현입니다.<br />제 프로젝트들을 소개합니다.</p>
+      </header>
+      <div className="projects">
+        {projects.map((project, index) => (
+          <div key={index} className="project">
+            <div className="img-container">
+              <img src={project.imgSrc} alt={project.title} />
             </div>
-          ))}
-        </div>
+            <h2>{project.title}</h2>
+            <h2>{project.subtitle}</h2>
+            <span>{project.description}</span>
+            <button onClick={() => window.open(project.link, '_blank')}>자세히 보러가기</button>
+          </div>
+        ))}
       </div>
-    </div>
+    </MacOSTitlebar>
   );
 };
 
