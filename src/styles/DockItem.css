@@ -1,7 +1,7 @@
-.dock-item {
+  .dock-item {
     position: relative;
-    width: 4rem;
-    height: 4rem;
+    width: 4rem; /* 기본 너비를 4rem로 설정 */
+    aspect-ratio: 1 / 1; /* 항상 정사각형 비율 유지 */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -9,6 +9,7 @@
     cursor: pointer;
     margin-bottom: 0.5rem;
   }
+
   
   .dock-item:hover {
     transform: scale(1.1);
@@ -22,13 +23,7 @@
   }
   
   .dock-item.hidden {
-    opacity: 0;
-    pointer-events: none;
-  }
-  
-  .dock-item.visible {
-    opacity: 1;
-    pointer-events: auto;
+    display: none; /* 숨겨진 상태일 때 DockItem을 표시하지 않음 */
   }
 
   .dock-launchpad,
@@ -51,16 +46,8 @@
   height: 0.5rem;
   border-radius: 50%;
   background-color: rgba(0, 0, 0, 0.6);
-  opacity: 0;
-  transition: opacity 0.3s ease, background-color 0.3s ease;
-}
-
-.dock-item.active .active-indicator {
   opacity: 1;
-}
-
-.dock-item:hover .active-indicator {
-  opacity: 0;
+  transition: opacity 0.3s ease, background-color 0.3s ease;
 }
 
 
@@ -84,4 +71,11 @@
   .minimized-container:hover,
   .dock-item:hover {
     transform: scale(1.1);
+  }
+
+  @media screen and (max-width: 768px) {
+    .dock-item {
+      width: 3.5rem; /* 미디어 쿼리에서 너비를 3rem으로 변경 */
+    }
+    
   }

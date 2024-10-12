@@ -1,5 +1,7 @@
 import React from 'react';
-import MacOSTitlebar from '../common/MacOSTitlebar';
+import Container from '../common/Container';
+import '../../styles/Safari.css';
+import '../../styles/Container.css';
 
 const Safari: React.FC = () => {
   const imageUrl = `${process.env.REACT_APP_IMAGE_URL}`;
@@ -29,7 +31,7 @@ const Safari: React.FC = () => {
   ];
 
   return (
-    <MacOSTitlebar title="Portfolio">
+    <Container title="Portfolio" appName="safari">
       <header>
         <h1>김정현의 포트폴리오</h1>
         <p>안녕하세요, 늘 고민하는 개발자 김정현입니다.<br />제 프로젝트들을 소개합니다.</p>
@@ -47,7 +49,7 @@ const Safari: React.FC = () => {
           </div>
         ))}
       </div>
-    </MacOSTitlebar>
+    </Container>
   );
 };
 

@@ -5,14 +5,19 @@ import MusicPlayer from './components/apps/MusicPlayer';
 import Dock from './components/common/Dock';
 import './App.css';
 
+import { AppStateProvider } from './contexts/AppContext';
+
 
 const App: React.FC = () => {
   return (
-    <div className="App">
-      <StatusBar />
-      <MusicPlayer />
-      <Dock />
-    </div>
+    <AppStateProvider>
+      <div className="App">
+        <StatusBar />
+        <MusicPlayer />
+        <Dock />
+      </div>
+    </AppStateProvider>
+    
   );
 };
 
