@@ -71,6 +71,7 @@ const MusicPlayer: React.FC = () => {
       audio.play().then(() => {
         setIsPlaying(true);
         updatePlayerVisualState(true);
+        document.removeEventListener("click", handleUserInteraction);
       }).catch((error) => {
         console.error("Autoplay failed:", error.message);
         document.addEventListener("click", handleUserInteraction);
@@ -82,9 +83,11 @@ const MusicPlayer: React.FC = () => {
   const handleUserInteraction = useCallback(() => {
     if (!isPlaying) {
       playAudio();
-      document.removeEventListener("click", handleUserInteraction);
     }
+    document.removeEventListener("click", handleUserInteraction);
   }, [isPlaying, playAudio]);
+
+  
 
   // 재생/일시정지 토글 함수
   const togglePlayPause = useCallback(() => {
@@ -156,6 +159,7 @@ const MusicPlayer: React.FC = () => {
   // 마우스를 떼면 드래그 중지
   const handleMouseUp = () => setIsDragging(false);
 
+  
   // 드래그를 위한 이벤트 리스너 추가/제거
   useEffect(() => {
     if (isDragging) {

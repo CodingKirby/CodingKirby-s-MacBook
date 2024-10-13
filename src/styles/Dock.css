@@ -45,7 +45,8 @@
   border-right: 0.1rem solid rgba(0.5, 0.5, 0.5, 0.1);
 }
 
-.modal-overlay {
+/* Dock.css */
+.launchpad-modal {
   position: fixed;
   top: 0;
   left: 0;
@@ -58,7 +59,7 @@
   z-index: 2000;
 }
 
-.modal-content {
+.launchpad-content {
   display: flex;
   position: relative;
   background: rgba(255, 255, 255, 0.7);
@@ -70,7 +71,7 @@
   max-width: 26rem;
 }
 
-.hidden-items {
+.hidden-apps {
   display: flex;
   flex-wrap: wrap;
   gap: 2rem;
