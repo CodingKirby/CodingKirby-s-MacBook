@@ -112,7 +112,7 @@
   
   /* 콘텐츠 영역 스타일 */
   .content {
-    overflow: auto; /* 스크롤 가능한 영역 */
+    overflow: scroll; /* 스크롤 가능한 영역 */
     height: 100%; /* 상단바 높이만큼 뺀 나머지 높이 */
   }
 

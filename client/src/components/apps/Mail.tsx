@@ -13,9 +13,7 @@ const Mail: React.FC = () => {
 
   // 메일 목록 데이터 (더미 데이터)
   const mails = [
-    { id: 1, subject: 'Welcome to the Mail App!', from: 'admin@mail.com', content: 'Thank you for joining our platform.' },
-    { id: 2, subject: 'Weekly Newsletter', from: 'news@mail.com', content: 'Here is the latest news of the week.' },
-    { id: 3, subject: 'Your Subscription Expiring', from: 'support@mail.com', content: 'Your subscription will expire soon. Please renew it.' },
+    { id: 1, subject: 'Welcome!', from: 'codingkirby0@gmail.com', content: 'Thank you for joining my site.\nI am looking for a job! Please contact me.' }
   ];
 
   // 상태 관리 (선택된 메일)
@@ -30,7 +28,10 @@ const Mail: React.FC = () => {
   return (
     <Container title="Mail" appName="mail" appStyle={{ overflow: 'hidden' }}>
       <div className="mail-app">
+        
+
         <div className="mail-list">
+           
           <h3>Inbox</h3>
           <ul>
             {mails.map((mail) => (
@@ -40,14 +41,19 @@ const Mail: React.FC = () => {
               </li>
             ))}
           </ul>
+
+          <a className="mail-compose" href="mailto: codingkirby0@gmail.com">
+                <i className="fa-solid fa-paper-plane"></i>
+            </a>
         </div>
+        
         <div className="mail-details">
           {mailDetails ? (
-            <>
+            <div>
               <h4>{mailDetails.subject}</h4>
               <p>From: {mailDetails.from}</p>
               <p>{mailDetails.content}</p>
-            </>
+            </div>
           ) : (
             <p>Select a mail to read</p>
           )}
