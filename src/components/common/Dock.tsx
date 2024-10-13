@@ -62,7 +62,7 @@ const Dock: React.FC = () => {
       navigator.clipboard.writeText(window.location.href);
       setIsSharing(true); // Toast 표시 시 인디케이터 활성화
 
-      const toastId = toast.info('링크가 복사되었습니다!', {
+      toast.info('링크가 복사되었습니다!', {
         className: 'custom-toast', // 커스텀 클래스 적용
         progressClassName: 'custom-toast-progress', // 커스텀 클래스 적용
         onClose: () => setIsSharing(false), // Toast가 닫힐 때 인디케이터 비활성화
@@ -75,7 +75,11 @@ const Dock: React.FC = () => {
   };
 
   const handleLaunchpadClick = () => {
-    setIsLaunchpadOpen(!isLaunchpadOpen); // Launchpad 버튼 클릭 시 모달 열고 닫기
+    if (hiddenItems.length > 0) {
+      setIsLaunchpadOpen(!isLaunchpadOpen); // 숨겨진 앱이 있을 때만 Launchpad 모달 열고 닫기
+    } else {
+      setIsLaunchpadOpen(false); // 숨겨진 앱이 없으면 모달을 닫음
+    }
   };
 
   const closeLaunchpad = () => {
@@ -90,12 +94,12 @@ const Dock: React.FC = () => {
     }
   };
 
-  // Launchpad 내에서의 share 앱 상태를 따로 관리
+  // Launchpad 내에서의 share 앱 상태를 따로 관리 (Launchpad 안에서는 인디케이터 표시 안 함)
   const getLaunchpadAppState = (appName: string) => {
     if (appName === 'share') {
       return isSharing; // share 앱의 경우 인디케이터는 isSharing 상태에 따름
     }
-    return apps[appName as keyof typeof apps].isRunning;
+    return apps[appName as keyof typeof apps].isRunning; // Launchpad 내에서도 앱이 실행 중이면 인디케이터 유지
   };
 
   return (
@@ -128,7 +132,7 @@ const Dock: React.FC = () => {
         <div className="dock-left-end">
           <DockItem
             icon={`${imgUrl}/launchpad.png`}
-            isActive={isLaunchpadOpen} // Launchpad 열렸을 때만 인디케이터 활성화
+            isActive={isLaunchpadOpen && hiddenItems.length > 0} // Launchpad 열렸을 때만 인디케이터 활성화
             isHidden={false}
             onClick={handleLaunchpadClick} // Launchpad 클릭 시 모달 열기
           />
@@ -144,7 +148,7 @@ const Dock: React.FC = () => {
       </div>
 
       {/* Launchpad 모달 */}
-      {isLaunchpadOpen && (
+      {isLaunchpadOpen && hiddenItems.length > 0 && (
         <div className="launchpad-modal" onClick={handleOutsideClick}>
           <div className="launchpad-content">
             <div className="hidden-apps">
