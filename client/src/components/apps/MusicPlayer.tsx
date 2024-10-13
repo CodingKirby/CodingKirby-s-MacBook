@@ -4,11 +4,9 @@ import { useAppState } from '../../contexts/AppContext';
 import "../../styles/MusicPlayer.css";
 import '../../styles/Container.css';
 
-// 이미지와 mp3 파일의 URL을 환경 변수에서 가져옴
 const imageUrl = process.env.REACT_APP_IMAGE_URL;
 const mp3Url = process.env.REACT_APP_MUSIC_URL;
 
-// 앨범, 트랙 이름, 앨범 아트, 트랙 URL 샘플 데이터
 const albums = ["Spirited Away", "Spirited Away"];
 const trackNames = ["Inochi No Namae", "Itsumo Nando Demo"];
 const albumArtworks = [`${imageUrl}/Album_1.png`, `${imageUrl}/Album_2.png`];
@@ -40,8 +38,9 @@ const MusicPlayer: React.FC = () => {
   // 오디오 상태를 동기화하지 않고 오디오 재생 상태 유지
   const syncAudioState = useCallback(() => {
     const audio = audioRef.current;
-    if (audio && !isPlaying) {
+    if (audio) {
       audio.src = trackUrls[trackIndex]; // 오디오 URL 설정
+      audio.currentTime = currentTime; // 이전 재생 위치에서 시작
       audio.addEventListener("timeupdate", updateCurrentTime);
       audio.addEventListener("canplay", () => setIsBuffering(false));
       audio.addEventListener("waiting", () => setIsBuffering(true));
@@ -54,7 +53,7 @@ const MusicPlayer: React.FC = () => {
         audio.removeEventListener("ended", () => handleTrackChange(trackIndex + 1));
       };
     }
-  }, [trackIndex, isPlaying]);
+  }, [trackIndex, currentTime]);
 
   // 플레이어의 비주얼 상태를 업데이트
   const updatePlayerVisualState = useCallback((isActive: boolean) => {
@@ -87,14 +86,17 @@ const MusicPlayer: React.FC = () => {
     document.removeEventListener("click", handleUserInteraction);
   }, [isPlaying, playAudio]);
 
-  
-
   // 재생/일시정지 토글 함수
   const togglePlayPause = useCallback(() => {
     const audio = audioRef.current;
     if (audio) {
-      isPlaying ? audio.pause() : playAudio();
-      setIsPlaying((prev) => !prev);
+      if (isPlaying) {
+        setCurrentTime(audio.currentTime); // 현재 시간을 저장
+        audio.pause();
+      } else {
+        playAudio();
+      }
+      setIsPlaying(!isPlaying);
       updatePlayerVisualState(!isPlaying);
     }
   }, [isPlaying, playAudio, updatePlayerVisualState]);
@@ -103,6 +105,7 @@ const MusicPlayer: React.FC = () => {
   const handleTrackChange = useCallback((index: number) => {
     const newIndex = (index + albums.length) % albums.length;
     setTrackIndex(newIndex);
+    setCurrentTime(0); // 트랙 변경 시 시간 초기화
     setIsPlaying(false);
     updatePlayerVisualState(false);
 
@@ -117,6 +120,7 @@ const MusicPlayer: React.FC = () => {
     if (duration && !isNaN(duration)) {
       const seekTime = (e.nativeEvent.offsetX / e.currentTarget.offsetWidth) * duration;
       if (audioRef.current) audioRef.current.currentTime = seekTime;
+      setCurrentTime(seekTime);
     }
   }, [duration]);
 
@@ -140,8 +144,7 @@ const MusicPlayer: React.FC = () => {
 
   // 마우스를 눌렀을 때 드래그 시작
   const handleMouseDown = (e: React.MouseEvent) => {
-    bringAppToFront("music")
-    
+    bringAppToFront("music");
     e.preventDefault();
     setIsDragging(true);
     setInitialMousePos({ x: e.clientX - position.x, y: e.clientY - position.y });
@@ -159,7 +162,6 @@ const MusicPlayer: React.FC = () => {
   // 마우스를 떼면 드래그 중지
   const handleMouseUp = () => setIsDragging(false);
 
-  
   // 드래그를 위한 이벤트 리스너 추가/제거
   useEffect(() => {
     if (isDragging) {
@@ -181,6 +183,7 @@ const MusicPlayer: React.FC = () => {
     closeApp("music");
     if (isPlaying) audioRef.current?.pause();
     setIsPlaying(false);
+    setCurrentTime(0); // 앱이 꺼지면 재생 시간을 초기화
   };
 
   // 앱 최소화 함수

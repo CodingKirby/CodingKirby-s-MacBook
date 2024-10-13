@@ -1,8 +1,11 @@
+// src/components/StatusBar.tsx
 import React, { useState, useEffect } from 'react';
+import { useMusic } from '../../contexts/MusicContext';
 import '../../styles/Statusbar.css';
 
 const StatusBar: React.FC = () => {
   const [time, setTime] = useState<string>('');
+  const { isPlaying, play, pause, nextTrack, prevTrack } = useMusic();
 
   useEffect(() => {
     const updateTime = () => {
@@ -13,7 +16,7 @@ const StatusBar: React.FC = () => {
       const formattedTime = `${hours % 12 || 12}:${minutes < 10 ? '0' : ''}${minutes} ${ampm}`;
       setTime(formattedTime);
     };
-    
+
     const intervalId = setInterval(updateTime, 1000);
     updateTime();
 
@@ -37,12 +40,13 @@ const StatusBar: React.FC = () => {
           display: 'grid',
           gridTemplateColumns: 'repeat(4, 0.8fr)',
         }}>
-          <span className="menu-item"><i className="fas fa-fast-backward"></i></span>
-          <span className="menu-item"><i className="fas fa-pause"></i></span>
-          <span className="menu-item"><i className="fas fa-fast-forward"></i></span>
-          <span className="menu-item"><i className="fas fa-volume-up"></i></span>
+          <span className="menu-item" onClick={prevTrack}><i className="fas fa-fast-backward"></i></span>
+          <span className="menu-item" onClick={isPlaying ? pause : play}>
+            <i className={`fas ${isPlaying ? 'fa-pause' : 'fa-play'}`}></i>
+          </span>
+          <span className="menu-item" onClick={nextTrack}><i className="fas fa-fast-forward"></i></span>
         </div>
-        
+
         <span className="menu-item"><i className="fas fa-wifi"></i></span>
         <span className="menu-item"><i className="fas fa-battery-three-quarters"></i></span>
         <span className="menu-item">{time}</span>

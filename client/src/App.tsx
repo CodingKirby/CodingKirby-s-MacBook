@@ -10,18 +10,22 @@ import Dock from './components/common/Dock';
 import './App.css';
 
 import { AppStateProvider } from './contexts/AppContext';
+import { MusicProvider } from './contexts/MusicContext';
 
 const App: React.FC = () => {
   return (
     <AppStateProvider>
-      <div className="App">
-        <StatusBar />
-        <MusicPlayer />
-        <Safari />
-        <Blog />
-        <Mail />
-        <Dock />
-      </div>
+      <MusicProvider>
+        <div className="App">
+          <StatusBar />
+          <MusicPlayer />
+          <Safari />
+          <Blog />
+          <Mail />
+          <Dock />
+        </div>
+      </MusicProvider>
+      
     </AppStateProvider>
     
   );
