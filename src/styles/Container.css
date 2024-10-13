@@ -199,7 +199,7 @@
   .macos-titlebar {
     background-color: #f2f2f7;
     height: 1.8rem;
-    border-bottom: 1px solid #d6d6d6;
+    border: 1px solid #d6d6d6;
     display: flex;
     align-items: center;
     justify-content: flex-start;

@@ -15,7 +15,7 @@ const albumArtworks = [`${imageUrl}/Album_1.png`, `${imageUrl}/Album_2.png`];
 const trackUrls = [`${mp3Url}/1.mp3`, `${mp3Url}/2.mp3`];
 
 const MusicPlayer: React.FC = () => {
-  const { apps, closeApp, minimizeApp } = useAppState();
+  const { apps, closeApp, minimizeApp, bringAppToFront } = useAppState();
   
   const playerRef = useRef<HTMLDivElement | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -35,6 +35,7 @@ const MusicPlayer: React.FC = () => {
 
   const isRunning = apps.music.isRunning;
   const isMinimized = apps.music.isMinimized;
+  const zIndex = apps.music.zIndex;
 
   // 오디오 상태를 동기화하지 않고 오디오 재생 상태 유지
   const syncAudioState = useCallback(() => {
@@ -136,6 +137,8 @@ const MusicPlayer: React.FC = () => {
 
   // 마우스를 눌렀을 때 드래그 시작
   const handleMouseDown = (e: React.MouseEvent) => {
+    bringAppToFront("music")
+    
     e.preventDefault();
     setIsDragging(true);
     setInitialMousePos({ x: e.clientX - position.x, y: e.clientY - position.y });
@@ -190,13 +193,15 @@ const MusicPlayer: React.FC = () => {
   return (
     <div
       className={`music-player ${isMinimizing ? 'minimizing' : ''}`}
-      style={{ 
+      style={{
         left: `${position.x}px`, 
         top: `${position.y}px`, 
         position: "absolute", 
-        display: isMinimized ? "none" : "block"  // 최소화 시 플레이어 UI를 숨김
+        display: isMinimized ? "none" : "block",  // 최소화 시 플레이어 UI를 숨김
+        zIndex: zIndex,  // z-index 적용
       }}
       ref={playerRef}
+      onClick={() => bringAppToFront("music")}
     >
       {/* 음악 플레이어의 타이틀바 */}
       <div

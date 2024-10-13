@@ -1,17 +1,17 @@
 import React, { useRef, useEffect, useState } from 'react';
 import '../../styles/Container.css';
-import { useAppState } from '../../contexts/AppContext';
+import { AppName, useAppState } from '../../contexts/AppContext';
 
 interface ContainerProps {
   title: string;
-  appName: string; 
+  appName: AppName; 
   children: React.ReactNode;
   appStyle?: React.CSSProperties; 
   titleBarStyle?: React.CSSProperties;
 }
 
 const Container: React.FC<ContainerProps> = ({ title, appName, children, appStyle, titleBarStyle }) => {
-  const { closeApp, minimizeApp, maximizeApp } = useAppState();
+  const { apps, closeApp, minimizeApp, maximizeApp, bringAppToFront } = useAppState();
 
   const containerRef = useRef<HTMLDivElement | null>(null); 
   const [position, setPosition] = useState({ x: 100, y: 100 });
@@ -85,6 +85,8 @@ const Container: React.FC<ContainerProps> = ({ title, appName, children, appStyl
   };
 
   const handleMouseDown = (e: React.MouseEvent) => {
+    bringAppToFront(appName as AppName);
+
     e.preventDefault();
     setIsDragging(true);
     setInitialMousePos({ x: e.clientX - position.x, y: e.clientY - position.y });
@@ -136,8 +138,10 @@ const Container: React.FC<ContainerProps> = ({ title, appName, children, appStyl
         height: `${containerSize.height}px`,
         transform: `translate(${position.x}px, ${position.y}px)`,
         position: 'absolute',
+        zIndex: apps[appName as AppName].zIndex
       }}
       ref={containerRef}
+      onClick={() => bringAppToFront(appName as AppName)}
     >
       <div 
         className="macos-titlebar" 
