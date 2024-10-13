@@ -35,7 +35,7 @@ const MusicPlayer: React.FC = () => {
   const handleMouseMove = useCallback((e: MouseEvent) => {
     if (isDragging) {
       const newX = Math.min(Math.max(0, e.clientX - initialMousePos.x), window.innerWidth - playerRef.current!.offsetWidth);
-      const newY = Math.min(Math.max(60, e.clientY - initialMousePos.y), window.innerHeight - playerRef.current!.offsetHeight);
+      const newY = Math.min(Math.max(25, e.clientY - initialMousePos.y), window.innerHeight - playerRef.current!.offsetHeight);
       setPosition({ x: newX, y: newY });
     }
   }, [isDragging, initialMousePos]);

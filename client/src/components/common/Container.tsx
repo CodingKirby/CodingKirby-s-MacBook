@@ -22,6 +22,7 @@ const Container: React.FC<ContainerProps> = ({ title, appName, children, appStyl
   const [containerSize, setContainerSize] = useState({ width: 400, height: 300 });
   const [isResizing, setIsResizing] = useState(false);
   const [resizeDirection, setResizeDirection] = useState('');
+  const [isMaximized, setIsMaximized] = useState(false);
   const [isMinimizing, setIsMinimizing] = useState(false);  // minimize 애니메이션을 위한 상태 추가
   const [minimizedPosition, setMinimizedPosition] = useState({ x: 0, y: 0 }); // minimizedPosition 상태
 
@@ -71,7 +72,14 @@ const Container: React.FC<ContainerProps> = ({ title, appName, children, appStyl
   };
 
   const handleMaximize = () => {
-    maximizeApp(appName as keyof typeof useAppState);
+    if (isMaximized) {
+      // 최대화 취소 (기존 크기 및 위치 복원)
+      maximizeApp(appName as keyof typeof useAppState);
+    } else {
+      // 화면 전체로 최대화
+      setPosition({ x: 0, y: 0 });
+      setContainerSize({ width: window.innerWidth, height: window.innerHeight / 100 * 70 });
+    }
   };
 
   // 크기 조정 시작 처리
@@ -195,6 +203,7 @@ const Container: React.FC<ContainerProps> = ({ title, appName, children, appStyl
       }}
       ref={containerRef}
       onClick={onClick}
+      onDoubleClick={handleMaximize} 
     >
       <div
         className="macos-titlebar"

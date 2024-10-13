@@ -135,10 +135,11 @@ export const AppStateProvider: React.FC<{ children: ReactNode }> = ({ children }
       [appName]: {
         ...prevState[appName],
         isMinimized: false,
+        isMaximized: true,  // isMaximized 상태 추가
       },
     }));
-  }
-  , []);
+  }, []);
+  
 
   const minimizeApp = useCallback((appName: AppName) => {
     setApps((prevState) => ({
