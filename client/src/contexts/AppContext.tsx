@@ -1,3 +1,5 @@
+// Path: client/src/contexts/AppContext.tsx
+
 import React, { createContext, useContext, useState, ReactNode, useCallback } from 'react';
 
 // Define app names and states
