@@ -36,7 +36,26 @@ const MusicPlayer: React.FC = () => {
   const isRunning = apps.music.isRunning;
   const isMinimized = apps.music.isMinimized;
 
-  // 플레이어의 비주얼 상태를 업데이트 (활성화/비활성화)
+  // 오디오 상태를 동기화하지 않고 오디오 재생 상태 유지
+  const syncAudioState = useCallback(() => {
+    const audio = audioRef.current;
+    if (audio && !isPlaying) {
+      audio.src = trackUrls[trackIndex]; // 오디오 URL 설정
+      audio.addEventListener("timeupdate", updateCurrentTime);
+      audio.addEventListener("canplay", () => setIsBuffering(false));
+      audio.addEventListener("waiting", () => setIsBuffering(true));
+      audio.addEventListener("ended", () => handleTrackChange(trackIndex + 1));
+
+      return () => {
+        audio.removeEventListener("timeupdate", updateCurrentTime);
+        audio.removeEventListener("canplay", () => setIsBuffering(false));
+        audio.removeEventListener("waiting", () => setIsBuffering(true));
+        audio.removeEventListener("ended", () => handleTrackChange(trackIndex + 1));
+      };
+    }
+  }, [trackIndex, isPlaying]);
+
+  // 플레이어의 비주얼 상태를 업데이트
   const updatePlayerVisualState = useCallback((isActive: boolean) => {
     const activeClass = isActive ? "active" : "inactive";
     playerTrackRef.current?.classList.toggle("active", isActive);
@@ -44,7 +63,7 @@ const MusicPlayer: React.FC = () => {
     titleBarRef.current && (titleBarRef.current.style.top = isActive ? "-35px" : "0px");
   }, []);
 
-  // 오디오 재생 함수, 자동 재생 실패 시 유저 클릭 이벤트 대기
+  // 오디오 재생 함수
   const playAudio = useCallback(() => {
     const audio = audioRef.current;
     if (audio) {
@@ -61,9 +80,8 @@ const MusicPlayer: React.FC = () => {
   // 자동 재생 실패 시 유저가 클릭하면 재생
   const handleUserInteraction = useCallback(() => {
     if (!isPlaying) {
-      console.log("User clicked - starting audio");
       playAudio();
-      document.removeEventListener("click", handleUserInteraction); // 한 번 클릭 후 이벤트 리스너 제거
+      document.removeEventListener("click", handleUserInteraction);
     }
   }, [isPlaying, playAudio]);
 
@@ -107,43 +125,12 @@ const MusicPlayer: React.FC = () => {
     }
   }, []);
 
-  // 오디오 상태 동기화
-  const syncAudioState = useCallback(() => {
-    const audio = audioRef.current;
-    if (audio && !isPlaying) {
-      audio.src = trackUrls[trackIndex];
-      audio.addEventListener("timeupdate", updateCurrentTime);
-      audio.addEventListener("canplay", () => setIsBuffering(false));
-      audio.addEventListener("waiting", () => setIsBuffering(true));
-      audio.addEventListener("ended", () => handleTrackChange(trackIndex + 1));
-
-      return () => {
-        audio.removeEventListener("timeupdate", updateCurrentTime);
-        audio.removeEventListener("canplay", () => setIsBuffering(false));
-        audio.removeEventListener("waiting", () => setIsBuffering(true));
-        audio.removeEventListener("ended", () => handleTrackChange(trackIndex + 1));
-      };
-    }
-  }, [trackIndex, isPlaying]);
-
-  // 페이지 처음 로드될 때만 클릭 이벤트 리스너 추가
-  useEffect(() => {
-    const handleInitialClick = () => {
-      console.log("Initial user interaction - starting audio");
-      playAudio(); // 사용자가 처음 클릭하면 음악 재생
-      document.removeEventListener("click", handleInitialClick); // 이벤트 리스너 제거
-    };
-
-    document.addEventListener("click", handleInitialClick); // 첫 클릭을 감지
-
-    return () => {
-      document.removeEventListener("click", handleInitialClick); // 컴포넌트 언마운트 시 리스너 제거
-    };
-  }, [playAudio]);
-
+  // 앱이 실행 중이고 최소화되지 않았을 때 오디오 상태 동기화
   useEffect(() => {
     if (isRunning && !isMinimized) {
-      syncAudioState();
+      if (!isPlaying) {
+        syncAudioState();
+      }
     }
   }, [isRunning, isMinimized, syncAudioState]);
 
@@ -182,6 +169,7 @@ const MusicPlayer: React.FC = () => {
   }, [isDragging, handleMouseMove]);
 
   // 앱을 닫는 함수
+  const [isMinimizing, setIsMinimizing] = useState(false);  // 애니메이션 상태 추가
   const handleCloseApp = () => {
     closeApp("music");
     if (isPlaying) audioRef.current?.pause();
@@ -189,13 +177,19 @@ const MusicPlayer: React.FC = () => {
   };
 
   // 앱 최소화 함수
-  const handleMinimizeApp = () => minimizeApp("music");
+  const handleMinimizeApp = () => {
+    setIsMinimizing(true);  // 애니메이션 트리거
+    setTimeout(() => {
+      minimizeApp("music");  // 애니메이션이 끝난 후 최소화
+      setIsMinimizing(false);  // 상태 초기화
+    }, 500);  // 애니메이션 시간과 맞추기 (0.5초)
+  };
 
   if (!isRunning) return null;
 
   return (
     <div
-      className="music-player"
+      className={`music-player ${isMinimizing ? 'minimizing' : ''}`}
       style={{ 
         left: `${position.x}px`, 
         top: `${position.y}px`, 

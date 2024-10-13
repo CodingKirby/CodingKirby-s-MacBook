@@ -6,8 +6,8 @@ interface ContainerProps {
   title: string;
   appName: string; 
   children: React.ReactNode;
-  appStyle?: React.CSSProperties; // 앱별 스타일을 받는 프로퍼티 추가
-  titleBarStyle?: React.CSSProperties; // 타이틀바 스타일을 받는 프로퍼티 추가
+  appStyle?: React.CSSProperties; 
+  titleBarStyle?: React.CSSProperties;
 }
 
 const Container: React.FC<ContainerProps> = ({ title, appName, children, appStyle, titleBarStyle }) => {
@@ -20,6 +20,7 @@ const Container: React.FC<ContainerProps> = ({ title, appName, children, appStyl
   const [containerSize, setContainerSize] = useState({ width: 400, height: 300 });
   const [isResizing, setIsResizing] = useState(false);
   const [resizeDirection, setResizeDirection] = useState('');
+  const [isMinimizing, setIsMinimizing] = useState(false);  // minimize 애니메이션을 위한 상태 추가
 
   const MIN_WIDTH = 200;
   const MIN_HEIGHT = 150;
@@ -29,7 +30,11 @@ const Container: React.FC<ContainerProps> = ({ title, appName, children, appStyl
   };
 
   const handleMinimize = () => {
-    minimizeApp(appName as keyof typeof useAppState);
+    setIsMinimizing(true); // 애니메이션을 트리거
+    setTimeout(() => {
+      minimizeApp(appName as keyof typeof useAppState); // 애니메이션이 끝난 후 최소화 상태로 변경
+      setIsMinimizing(false); // 애니메이션 초기화
+    }, 500); // 애니메이션 시간과 맞춰서 0.5초 뒤에 최소화
   };
 
   const handleMaximize = () => {
@@ -49,26 +54,22 @@ const Container: React.FC<ContainerProps> = ({ title, appName, children, appStyl
     if (isResizing && containerRef.current) {
       const { width, height, left, top } = containerRef.current.getBoundingClientRect();
 
-      // 오른쪽으로 크기 조정
       if (resizeDirection.includes('right')) {
         const newWidth = Math.max(MIN_WIDTH, e.clientX - left);
         setContainerSize((prev) => ({ ...prev, width: newWidth }));
       }
 
-      // 아래쪽으로 크기 조정
       if (resizeDirection.includes('bottom')) {
         const newHeight = Math.max(MIN_HEIGHT, e.clientY - top);
         setContainerSize((prev) => ({ ...prev, height: newHeight }));
       }
 
-      // 왼쪽으로 크기 조정
       if (resizeDirection.includes('left')) {
         const newWidth = Math.max(MIN_WIDTH, width - (e.clientX - left));
         setContainerSize((prev) => ({ ...prev, width: newWidth }));
         setPosition((prev) => ({ ...prev, x: prev.x + (width - newWidth) }));
       }
 
-      // 위쪽으로 크기 조정
       if (resizeDirection.includes('top')) {
         const newHeight = Math.max(MIN_HEIGHT, height - (e.clientY - top));
         const deltaY = height - newHeight;
@@ -78,13 +79,11 @@ const Container: React.FC<ContainerProps> = ({ title, appName, children, appStyl
     }
   };
 
-  // 크기 조정 종료 처리
   const handleResizeEnd = () => {
     setIsResizing(false);
     setResizeDirection('');
   };
 
-  // 컨테이너 이동 처리
   const handleMouseDown = (e: React.MouseEvent) => {
     e.preventDefault();
     setIsDragging(true);
@@ -130,7 +129,7 @@ const Container: React.FC<ContainerProps> = ({ title, appName, children, appStyl
 
   return (
     <div
-      className="container"
+      className={`container ${isMinimizing ? 'minimizing' : ''}`} // 애니메이션을 위한 클래스 추가
       style={{
         ...appStyle,
         width: `${containerSize.width}px`,
