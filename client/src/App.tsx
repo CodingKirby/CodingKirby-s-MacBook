@@ -9,8 +9,6 @@ import Dock from './components/common/Dock';
 import './App.css';
 
 import { AppStateProvider } from './contexts/AppContext';
-import { ImageOff } from 'lucide-react';
-
 
 const App: React.FC = () => {
   return (
