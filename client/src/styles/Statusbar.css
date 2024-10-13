@@ -22,10 +22,6 @@
     margin-right: 0.8rem;
   }
 
-  .macos-statusbar .right-section {
-    margin-right: 0.8rem;
-  }
-
   .macos-statusbar .left-section,
   .macos-statusbar .right-section {
     display: flex;
@@ -113,6 +109,10 @@
 @media (max-width: 600px) {
   .macos-statusbar {
     padding: 0 5px;
+  }
+
+  .macos-statusbar .right-section {
+    margin-right: 1rem;
   }
 
   .menu-item-player span {
