@@ -4,6 +4,7 @@ import Safari from './components/apps/Safari';
 import MusicPlayer from './components/apps/MusicPlayer';
 
 import Blog from './components/apps/Blog';
+import Mail from './components/apps/Mail';
 
 import Dock from './components/common/Dock';
 import './App.css';
@@ -18,6 +19,7 @@ const App: React.FC = () => {
         <MusicPlayer />
         <Safari />
         <Blog />
+        <Mail />
         <Dock />
       </div>
     </AppStateProvider>

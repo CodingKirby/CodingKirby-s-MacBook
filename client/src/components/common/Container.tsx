@@ -9,9 +9,10 @@ interface ContainerProps {
   appStyle?: React.CSSProperties;
   contentStyle?: React.CSSProperties;
   titleBarStyle?: React.CSSProperties;
+  onClick?: () => void;
 }
 
-const Container: React.FC<ContainerProps> = ({ title, appName, children, appStyle, contentStyle, titleBarStyle }) => {
+const Container: React.FC<ContainerProps> = ({ title, appName, children, appStyle, contentStyle, titleBarStyle, onClick }) => {
   const { apps, closeApp, minimizeApp, maximizeApp, bringAppToFront } = useAppState();
 
   const containerRef = useRef<HTMLDivElement | null>(null); 
@@ -25,6 +26,8 @@ const Container: React.FC<ContainerProps> = ({ title, appName, children, appStyl
 
   const MIN_WIDTH = 200;
   const MIN_HEIGHT = 150;
+
+  const animationFrameRef = useRef<number | null>(null);
 
   const handleClose = () => {
     closeApp(appName as keyof typeof useAppState);
@@ -95,14 +98,23 @@ const Container: React.FC<ContainerProps> = ({ title, appName, children, appStyl
 
   const handleMouseMove = (e: MouseEvent) => {
     if (isDragging) {
-      const newX = e.clientX - initialMousePos.x;
-      const newY = e.clientY - initialMousePos.y;
-      setPosition({ x: newX, y: newY });
+      if (animationFrameRef.current === null) {
+        animationFrameRef.current = requestAnimationFrame(() => {
+          const newX = e.clientX - initialMousePos.x;
+          const newY = e.clientY - initialMousePos.y;
+          setPosition({ x: newX, y: newY });
+          animationFrameRef.current = null; // 다음 프레임을 위해 초기화
+        });
+      }
     }
   };
 
   const handleMouseUp = () => {
     setIsDragging(false);
+    if (animationFrameRef.current !== null) {
+      cancelAnimationFrame(animationFrameRef.current);
+      animationFrameRef.current = null;
+    }
   };
 
   useEffect(() => {
@@ -142,7 +154,7 @@ const Container: React.FC<ContainerProps> = ({ title, appName, children, appStyl
         zIndex: apps[appName as AppName].zIndex
       }}
       ref={containerRef}
-      onClick={() => bringAppToFront(appName as AppName)}
+      onClick={onClick}
     >
       <div 
         className="macos-titlebar" 
@@ -161,6 +173,7 @@ const Container: React.FC<ContainerProps> = ({ title, appName, children, appStyl
       </div>
       <div className="content" ref={containerRef}
         style={{ ...contentStyle }}
+        onClick={() => bringAppToFront(appName as AppName)}
       >
         {children}
       </div>
