@@ -113,8 +113,7 @@
   /* 콘텐츠 영역 스타일 */
   .content {
     overflow: auto; /* 스크롤 가능한 영역 */
-    height: calc(100% - 2rem); /* 상단바 높이만큼 뺀 나머지 높이 */
-    padding: 1rem; /* 콘텐츠 영역에 패딩 추가 */
+    height: 100%; /* 상단바 높이만큼 뺀 나머지 높이 */
   }
 
   .projects {
