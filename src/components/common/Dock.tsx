@@ -10,7 +10,7 @@ import '../../styles/Toast.css';
 const imgUrl = process.env.REACT_APP_IMAGE_URL;
 
 const Dock: React.FC = () => {
-  const { apps, openApp, maximizeApp } = useAppState();
+  const { apps, openApp, maximizeApp, bringAppToFront } = useAppState();
   const [hiddenItems, setHiddenItems] = useState<string[]>([]); 
   const [dockWidth, setDockWidth] = useState(window.innerWidth);
   const [isLaunchpadOpen, setIsLaunchpadOpen] = useState(false); // 모달 상태 관리
@@ -57,16 +57,18 @@ const Dock: React.FC = () => {
   const handleAppOpen = (appName: string) => {
     const appState = apps[appName as keyof typeof apps];
 
+    bringAppToFront(appName as keyof typeof apps);
+
     // 특정 앱에 대한 조건 처리
     if (appName === 'github') {
       // GitHub 페이지로 새 탭에서 이동
-      window.open('https://github.com/', '_blank');
+      window.open('https://github.com/CodingKirby', '_blank');
       return;
     }
 
     if (appName === 'notion') {
       // Notion 페이지로 새 탭에서 이동
-      window.open('https://www.notion.so/', '_blank');
+      window.open('https://calico-octave-0a0.notion.site/62b2692248d045bdb1796368054b3ac2?pvs=74', '_blank');
       return;
     }
 
