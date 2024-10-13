@@ -1,11 +1,17 @@
-// src/components/StatusBar.tsx
+// Path: client/src/components/common/StatusBar.tsx
+
 import React, { useState, useEffect } from 'react';
-import { useMusic } from '../../contexts/MusicContext';
+import { useMusic } from '../../contexts/MusicContext'; // MusicContext 사용
 import '../../styles/Statusbar.css';
 
 const StatusBar: React.FC = () => {
   const [time, setTime] = useState<string>('');
-  const { isPlaying, play, pause, nextTrack, prevTrack } = useMusic();
+  const {
+    isPlaying,
+    togglePlayPause,
+    playNextTrack,
+    playPreviousTrack,
+  } = useMusic(); // MusicContext에서 필요한 상태 및 함수 가져오기
 
   useEffect(() => {
     const updateTime = () => {
@@ -35,21 +41,26 @@ const StatusBar: React.FC = () => {
         <span className="menu-item">Window</span>
         <span className="menu-item">Help</span>
       </div>
+
+      
+
       <div className="right-section">
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(4, 0.8fr)',
-        }}>
-          <span className="menu-item" onClick={prevTrack}><i className="fas fa-fast-backward"></i></span>
-          <span className="menu-item" onClick={isPlaying ? pause : play}>
+        <div className="menu-item-player">
+          <span onClick={playPreviousTrack}><i className="fas fa-fast-backward"></i></span>
+          <span onClick={togglePlayPause}>
             <i className={`fas ${isPlaying ? 'fa-pause' : 'fa-play'}`}></i>
           </span>
-          <span className="menu-item" onClick={nextTrack}><i className="fas fa-fast-forward"></i></span>
+          <span onClick={playNextTrack}><i className="fas fa-fast-forward"></i></span>
+          <span><i className="fas fa-volume-up"></i></span>
         </div>
 
         <span className="menu-item"><i className="fas fa-wifi"></i></span>
         <span className="menu-item"><i className="fas fa-battery-three-quarters"></i></span>
-        <span className="menu-item">{time}</span>
+        <span className="menu-item"
+        style={{
+
+        }}
+        >{time}</span>
       </div>
     </div>
   );

@@ -39,6 +39,15 @@
   }
   
   .macos-statusbar .right-section .menu-item i {
-    margin-right: 0.2rem;
+    margin-right: 0.1rem;
+    font-size: 0.8rem;
   }
   
+  .menu-item-player {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-gap: 0.5rem;
+    align-items: center;
+    justify-items: center;
+    margin-right: 0.5rem;
+  }
