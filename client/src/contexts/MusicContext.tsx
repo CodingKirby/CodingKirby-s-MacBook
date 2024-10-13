@@ -16,12 +16,14 @@ interface MusicContextType {
   currentTime: number;
   duration: number;
   isBuffering: boolean;
+  volume: number; // 볼륨 상태 추가
   togglePlayPause: () => void;
   playNextTrack: () => void;
   playPreviousTrack: () => void;
   seekTo: (time: number) => void;
   updatePlayerVisualState: (isActive: boolean, playerTrack: HTMLElement, albumArt: HTMLElement, titleBar: HTMLElement) => void;
   stopAndReset: () => void;
+  setVolume: (volume: number) => void; // 볼륨 제어 함수 추가
 }
 
 const MusicContext = createContext<MusicContextType | undefined>(undefined);
@@ -41,6 +43,7 @@ export const MusicProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [isBuffering, setIsBuffering] = useState(false);
+  const [volume, setVolume] = useState(1); // 초기 볼륨 1(100%)으로 설정
 
   // 상태 업데이트
   const togglePlayPause = useCallback(() => {
@@ -136,11 +139,20 @@ export const MusicProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setCurrentTrack(0);
   }, []);
 
+  // 볼륨 변경 함수
+  const handleVolumeChange = (newVolume: number) => {
+    if (audioRef.current) {
+      audioRef.current.volume = newVolume;
+    }
+    setVolume(newVolume);
+  };
+
   return (
     <MusicContext.Provider value={{
-        isPlaying, currentTrack, currentTime, duration, isBuffering,
+        isPlaying, currentTrack, currentTime, duration, isBuffering, volume,
         togglePlayPause, playNextTrack, playPreviousTrack,
-        seekTo, updatePlayerVisualState, stopAndReset }}>
+        seekTo, updatePlayerVisualState, stopAndReset,
+        setVolume: handleVolumeChange }}>
       {children}
       <audio ref={audioRef} />
     </MusicContext.Provider>

@@ -16,6 +16,16 @@
     font-weight: 700;
   }
   
+  .macos-statusbar .left-section {
+    display: flex;
+    overflow: hidden;
+    margin-right: 0.8rem;
+  }
+
+  .macos-statusbar .right-section {
+    margin-right: 0.8rem;
+  }
+
   .macos-statusbar .left-section,
   .macos-statusbar .right-section {
     display: flex;
@@ -26,6 +36,7 @@
     margin: 0 0.5rem;
     color: #000;
     cursor: pointer;
+    flex-shrink: 0;
   }
   
   .macos-statusbar .apple-logo {
@@ -47,7 +58,71 @@
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
     grid-gap: 0.5rem;
-    align-items: center;
-    justify-items: center;
     margin-right: 0.5rem;
   }
+
+  .menu-item-player span {
+    min-width: 1rem; /* 일정한 크기 유지 */
+    max-width: 1rem; /* 일정한 크기 유지 */
+    flex-basis: 1rem; /* 버튼의 기본 크기 */
+    display: flex;
+    cursor: pointer;
+  }
+
+.volume-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.volume-modal {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 300px;
+  text-align: center;
+}
+
+.volume-slider {
+  width: 100%;
+  margin: 20px 0;
+}
+
+.close-button {
+  padding: 8px 16px;
+  background-color: #007aff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.close-button:hover {
+  background-color: #005bb5;
+}
+
+
+/* 작은 화면에서 대응 */
+@media (max-width: 600px) {
+  .macos-statusbar {
+    padding: 0 5px;
+  }
+
+  .menu-item-player span {
+    min-width: 0.5rem; /* 작은 화면에서 크기 줄이기 */
+    max-width: 0.5rem;
+    flex-basis: 0.5rem;
+    font-size: 0.7rem;
+  }
+
+  .macos-statusbar .menu-item {
+    font-size: 0.7rem;
+  }
+}

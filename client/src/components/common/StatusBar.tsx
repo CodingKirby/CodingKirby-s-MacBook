@@ -2,17 +2,14 @@
 
 import React, { useState, useEffect } from 'react';
 import { useMusic } from '../../contexts/MusicContext'; // MusicContext 사용
+import VolumeModal from './VolumeModal'; // VolumeModal 가져오기
 import '../../styles/Statusbar.css';
 
 const StatusBar: React.FC = () => {
   const [time, setTime] = useState<string>('');
-  const {
-    isPlaying,
-    togglePlayPause,
-    playNextTrack,
-    playPreviousTrack,
-  } = useMusic(); // MusicContext에서 필요한 상태 및 함수 가져오기
-
+  const [isModalVisible, setIsModalVisible] = useState<boolean>(false); // 모달 상태 관리
+  const { isPlaying, volume, togglePlayPause, playNextTrack, playPreviousTrack } = useMusic(); // MusicContext에서 필요한 상태 및 함수 가져오기
+  
   useEffect(() => {
     const updateTime = () => {
       const now = new Date();
@@ -29,6 +26,16 @@ const StatusBar: React.FC = () => {
     return () => clearInterval(intervalId);
   }, []);
 
+  const getVolumeIcon = () => {
+    if (volume === 0) {
+      return <i className="fas fa-volume-off" onClick={() => setIsModalVisible(true)}></i>;
+    } else if (volume <= 0.5) {
+      return <i className="fas fa-volume-low" onClick={() => setIsModalVisible(true)}></i>;
+    } else {
+      return <i className="fas fa-volume-high" onClick={() => setIsModalVisible(true)}></i>;
+    }
+  };
+
   return (
     <div className="macos-statusbar">
       <div className="left-section">
@@ -42,8 +49,6 @@ const StatusBar: React.FC = () => {
         <span className="menu-item">Help</span>
       </div>
 
-      
-
       <div className="right-section">
         <div className="menu-item-player">
           <span onClick={playPreviousTrack}><i className="fas fa-fast-backward"></i></span>
@@ -51,17 +56,18 @@ const StatusBar: React.FC = () => {
             <i className={`fas ${isPlaying ? 'fa-pause' : 'fa-play'}`}></i>
           </span>
           <span onClick={playNextTrack}><i className="fas fa-fast-forward"></i></span>
-          <span><i className="fas fa-volume-up"></i></span>
+          <span>
+            {getVolumeIcon()}
+          </span>
         </div>
 
         <span className="menu-item"><i className="fas fa-wifi"></i></span>
         <span className="menu-item"><i className="fas fa-battery-three-quarters"></i></span>
-        <span className="menu-item"
-        style={{
-
-        }}
-        >{time}</span>
+        <span className="menu-item time-display">{time}</span>
       </div>
+
+      {/* 볼륨 모달 */}
+      <VolumeModal isVisible={isModalVisible} onClose={() => setIsModalVisible(false)} />
     </div>
   );
 };
