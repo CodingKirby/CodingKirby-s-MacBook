@@ -1,0 +1,47 @@
+.mail-app {
+    display: flex;
+    height: 100%;
+    width: 100%;
+  }
+  
+  .mail-list {
+    width: 30%;
+    border-right: 1px solid #ddd;
+    padding: 10px;
+    overflow-y: auto;
+  }
+  
+  .mail-list ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .mail-list li {
+    padding: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .mail-list li.active {
+    background-color: #f0f0f0;
+  }
+  
+  .mail-subject {
+    display: block;
+    font-weight: bold;
+  }
+  
+  .mail-from {
+    font-size: 12px;
+    color: #888;
+  }
+  
+  .mail-details {
+    width: 70%;
+    padding: 20px;
+  }
+  
+  .mail-details h4 {
+    margin-top: 0;
+  }
+  
