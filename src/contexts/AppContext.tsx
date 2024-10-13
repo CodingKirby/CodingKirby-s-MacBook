@@ -38,7 +38,7 @@ interface AppContextType {
 const initialAppStates: Record<AppName, AppState> = {
   finder: { isRunning: true, isMinimized: false },
   music: { isRunning: true, isMinimized: false },
-  safari: { isRunning: false, isMinimized: false },
+  safari: { isRunning: true, isMinimized: false },
   photos: { isRunning: false, isMinimized: false },
   messages: { isRunning: false, isMinimized: false },
   memo: { isRunning: false, isMinimized: false },

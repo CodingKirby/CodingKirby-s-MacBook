@@ -1,13 +1,11 @@
 /* 컨테이너 스타일 */
 .container {
     position: absolute;
-    top: 5rem; /* 상단에서 5rem 떨어지도록 설정 */
-    left: 50%; /* 수평 중앙에 배치 */
     transform: translateX(-50%); /* 수평으로 정확히 중앙에 오도록 조정 */
     width: calc(70% - 4rem);
     min-width: 30%;
     min-height: 30%;
-    max-width: 90%;
+    max-width: 100%;
     max-height: 80%;
     text-align: center;
     background-color: #ffffff;
@@ -16,7 +14,78 @@
     border-radius: 0.5rem;
     overflow: hidden;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-    resize: both; /* 크기 조절 가능 */
+  }
+
+  .resize-handle {
+    position: absolute;
+    background-color: transparent;
+    z-index: 1;
+  }
+  
+  /* 모서리 핸들 */
+  .top-left {
+    width: 20px;
+    height: 20px;
+    top: -10px;
+    left: -10px;
+    cursor: nwse-resize;
+  }
+  
+  .top-right {
+    width: 20px;
+    height: 20px;
+    top: -10px;
+    right: -10px;
+    cursor: nesw-resize;
+  }
+  
+  .bottom-left {
+    width: 20px;
+    height: 20px;
+    bottom: -10px;
+    left: -10px;
+    cursor: nesw-resize;
+  }
+  
+  .bottom-right {
+    width: 20px;
+    height: 20px;
+    bottom: -10px;
+    right: -10px;
+    cursor: nwse-resize;
+  }
+  
+  /* 변 핸들 */
+  .top {
+    top: -5px;
+    left: 0;
+    right: 0;
+    height: 10px;
+    cursor: ns-resize;
+  }
+  
+  .right {
+    top: 0;
+    right: -5px;
+    bottom: 0;
+    width: 10px;
+    cursor: ew-resize;
+  }
+  
+  .bottom {
+    bottom: -5px;
+    left: 0;
+    right: 0;
+    height: 10px;
+    cursor: ns-resize;
+  }
+  
+  .left {
+    top: 0;
+    left: -5px;
+    bottom: 0;
+    width: 10px;
+    cursor: ew-resize;
   }
   
   /* transition을 적용할 때 사용하는 클래스 */
@@ -27,7 +96,7 @@
   /* 콘텐츠 영역 스타일 */
   .content {
     overflow: auto; /* 스크롤 가능한 영역 */
-    height: calc(100% - 3rem); /* 상단바를 제외한 전체 높이 설정 */
+    height: calc(100% - 2rem); /* 상단바 높이만큼 뺀 나머지 높이 */
     padding: 1rem; /* 콘텐츠 영역에 패딩 추가 */
   }
 

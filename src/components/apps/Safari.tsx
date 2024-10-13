@@ -1,11 +1,20 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Container from '../common/Container';
+import { useAppState } from '../../contexts/AppContext';
 import '../../styles/Safari.css';
 import '../../styles/Container.css';
 
 const Safari: React.FC = () => {
   const imageUrl = `${process.env.REACT_APP_IMAGE_URL}`;
   
+  // useAppState를 이용해 앱 상태를 관리
+  const { apps, closeApp, minimizeApp } = useAppState();
+
+  // 'safari' 앱의 실행 상태 및 최소화 상태를 가져옴
+  const isRunning = apps.safari.isRunning;
+  const isMinimized = apps.safari.isMinimized;
+
+  // 프로젝트 데이터
   const projects = [
     {
       imgSrc: `${imageUrl}/sproutfarm.png`,
@@ -15,20 +24,23 @@ const Safari: React.FC = () => {
       link: 'https://codingkirby.github.io/SproutFarm/'
     },
     {
-      imgSrc: './img/purrfectday.png',
+      imgSrc: `${imageUrl}/purrfectday.png`,
       title: 'PurrFectDay.',
       subtitle: '퍼펙데이.',
       description: '고양이와 함께 나만의 방을 만들어가는 귀여운 투두리스트😻',
       link: 'https://codingkirby.github.io/projects/PurrFectDay'
     },
     {
-      imgSrc: './img/chatbuddy.png',
+      imgSrc: `${imageUrl}/chatbuddy.png`,
       title: 'CHATBuddy',
       subtitle: '챗벗👀',
       description: '우울감을 지닌 청년들을 위한 AI 채팅 서비스',
       link: 'https://codingkirby.github.io/projects/CHATBuddy'
     }
   ];
+
+  // 앱이 실행 중이 아닌 경우나 최소화된 경우에는 렌더링하지 않음
+  if (!isRunning || isMinimized) return null;
 
   return (
     <Container title="Portfolio" appName="safari">

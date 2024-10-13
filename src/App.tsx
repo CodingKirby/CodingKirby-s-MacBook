@@ -14,6 +14,7 @@ const App: React.FC = () => {
       <div className="App">
         <StatusBar />
         <MusicPlayer />
+        <Safari />
         <Dock />
       </div>
     </AppStateProvider>
