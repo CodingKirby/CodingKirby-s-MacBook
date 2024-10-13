@@ -132,7 +132,7 @@ const Dock: React.FC = () => {
         <div className="dock-left-end">
           <DockItem
             icon={`${imgUrl}/launchpad.png`}
-            isActive={isLaunchpadOpen && hiddenItems.length > 0} // Launchpad 열렸을 때만 인디케이터 활성화
+            isActive={false} // Launchpad 열렸을 때만 인디케이터 활성화
             isHidden={false}
             onClick={handleLaunchpadClick} // Launchpad 클릭 시 모달 열기
           />
