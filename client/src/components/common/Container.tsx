@@ -4,7 +4,7 @@ import { AppName, useAppState } from '../../contexts/AppContext';
 
 interface ContainerProps {
   title: string;
-  appName: AppName; 
+  appName: AppName;
   children: React.ReactNode;
   appStyle?: React.CSSProperties;
   contentStyle?: React.CSSProperties;
@@ -15,7 +15,7 @@ interface ContainerProps {
 const Container: React.FC<ContainerProps> = ({ title, appName, children, appStyle, contentStyle, titleBarStyle, onClick }) => {
   const { apps, closeApp, minimizeApp, maximizeApp, bringAppToFront } = useAppState();
 
-  const containerRef = useRef<HTMLDivElement | null>(null); 
+  const containerRef = useRef<HTMLDivElement | null>(null);
   const [position, setPosition] = useState({ x: 100, y: 100 });
   const [isDragging, setIsDragging] = useState(false);
   const [initialMousePos, setInitialMousePos] = useState({ x: 0, y: 0 });
@@ -23,22 +23,51 @@ const Container: React.FC<ContainerProps> = ({ title, appName, children, appStyl
   const [isResizing, setIsResizing] = useState(false);
   const [resizeDirection, setResizeDirection] = useState('');
   const [isMinimizing, setIsMinimizing] = useState(false);  // minimize 애니메이션을 위한 상태 추가
+  const [minimizedPosition, setMinimizedPosition] = useState({ x: 0, y: 0 }); // minimizedPosition 상태
 
   const MIN_WIDTH = 200;
   const MIN_HEIGHT = 150;
 
   const animationFrameRef = useRef<number | null>(null);
 
+  // 로컬스토리지에 저장된 위치 불러오기
+  const loadPositionFromStorage = () => {
+    const storedPosition = localStorage.getItem(`containerPosition_${appName}`);
+    if (storedPosition) {
+      const { x, y } = JSON.parse(storedPosition);
+      setPosition({ x, y });
+    }
+  };
+
+  // 위치를 로컬 스토리지에 저장
+  const savePositionToStorage = (x: number, y: number) => {
+    localStorage.setItem(`containerPosition_${appName}`, JSON.stringify({ x, y }));
+  };
+
   const handleClose = () => {
     closeApp(appName as keyof typeof useAppState);
+    // 닫을 때 위치 저장
+    savePositionToStorage(position.x, position.y);
   };
 
   const handleMinimize = () => {
-    setIsMinimizing(true); // 애니메이션을 트리거
-    setTimeout(() => {
-      minimizeApp(appName as keyof typeof useAppState); // 애니메이션이 끝난 후 최소화 상태로 변경
-      setIsMinimizing(false); // 애니메이션 초기화
-    }, 500); // 애니메이션 시간과 맞춰서 0.5초 뒤에 최소화
+    const currentPosition = containerRef.current?.getBoundingClientRect();
+
+    if (currentPosition) {
+      const { left, top, width, height } = currentPosition;
+
+      // 현재 컨테이너의 중앙 위치를 기준으로 minimizedPosition 설정
+      const centerX = left + width / 2;
+      const centerY = top + height / 2;
+      setMinimizedPosition({ x: centerX, y: centerY });
+
+      setIsMinimizing(true); // 애니메이션을 트리거
+      setTimeout(() => {
+        minimizeApp(appName as keyof typeof useAppState); // 애니메이션이 끝난 후 최소화 상태로 변경
+        setIsMinimizing(false); // 애니메이션 초기화
+        savePositionToStorage(position.x, position.y); // 최소화될 때 위치 저장
+      }, 500); // 애니메이션 시간과 맞춰서 0.5초 뒤에 최소화
+    }
   };
 
   const handleMaximize = () => {
@@ -115,7 +144,14 @@ const Container: React.FC<ContainerProps> = ({ title, appName, children, appStyl
       cancelAnimationFrame(animationFrameRef.current);
       animationFrameRef.current = null;
     }
+    // 드래그 후 위치 저장
+    savePositionToStorage(position.x, position.y);
   };
+
+  // 컴포넌트가 로드될 때 위치 불러오기
+  useEffect(() => {
+    loadPositionFromStorage();
+  }, []);
 
   useEffect(() => {
     if (isDragging) {
@@ -149,29 +185,35 @@ const Container: React.FC<ContainerProps> = ({ title, appName, children, appStyl
         ...appStyle,
         width: `${containerSize.width}px`,
         height: `${containerSize.height}px`,
-        transform: `translate(${position.x}px, ${position.y}px)`,
+        left: position.x,
+        top: position.y,
         position: 'absolute',
-        zIndex: apps[appName as AppName].zIndex
+        zIndex: apps[appName as AppName].zIndex,
+        transform: isMinimizing ? `translate(${minimizedPosition.x - position.x}px, ${minimizedPosition.y - position.y}px) scale(0)` : 'none',
+        opacity: isMinimizing ? 0 : 1,
+        transition: 'transform 0.5s ease-in-out, opacity 0.5s ease-in-out', // 애니메이션 설정
       }}
       ref={containerRef}
       onClick={onClick}
     >
-      <div 
-        className="macos-titlebar" 
+      <div
+        className="macos-titlebar"
         onMouseDown={handleMouseDown}
         style={{
           ...titleBarStyle,
-          cursor: 'grab'
+          cursor: 'grab',
         }}
       >
         <div className="traffic-lights">
-          <span className="close" onClick={handleClose}></span> 
-          <span className="minimize" onClick={handleMinimize}></span> 
+          <span className="close" onClick={handleClose}></span>
+          <span className="minimize" onClick={handleMinimize}></span>
           <span className="fullscreen" onClick={handleMaximize}></span>
         </div>
         <span className="title">{title}</span>
       </div>
-      <div className="content" ref={containerRef}
+      <div
+        className="content"
+        ref={containerRef}
         style={{ ...contentStyle }}
         onClick={() => bringAppToFront(appName as AppName)}
       >

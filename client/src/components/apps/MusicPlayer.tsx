@@ -13,8 +13,10 @@ const MusicPlayer: React.FC = () => {
   const { isRunning, isMinimized, zIndex } = apps.music;
 
   const [isDragging, setIsDragging] = useState(false);
+  const [isMinimizing, setIsMinimizing] = useState(false);  // minimize 애니메이션을 위한 상태 추가
   const [position, setPosition] = useState({ x: window.innerWidth - 450, y: 80 });
   const [initialMousePos, setInitialMousePos] = useState({ x: 0, y: 0 });
+  const [minimizedPosition, setMinimizedPosition] = useState({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
 
   const playerRef = useRef<HTMLDivElement | null>(null);
   const playerTrackRef = useRef<HTMLDivElement | null>(null);
@@ -61,6 +63,26 @@ const MusicPlayer: React.FC = () => {
     closeApp("music");
   };
 
+  // 최소화 애니메이션 처리
+  const handleMinimize = () => {
+    const currentPosition = playerRef.current?.getBoundingClientRect();
+
+    if (currentPosition) {
+      const { left, top, width, height } = currentPosition;
+
+      // 현재 컨테이너의 중앙 위치를 기준으로 minimizedPosition 설정
+      const centerX = left + width / 2;
+      const centerY = top + height / 2;
+      setMinimizedPosition({ x: centerX, y: centerY });
+
+      setIsMinimizing(true); // 애니메이션 트리거
+      setTimeout(() => {
+        minimizeApp("music"); // 최소화 상태로 변경
+        setIsMinimizing(false); // 애니메이션 초기화
+      }, 500); // 애니메이션 시간과 맞춰서 0.5초 뒤에 최소화
+    }
+  };
+
   // isPlaying 상태에 따라 시각적 상태 업데이트
   useEffect(() => {
     if (playerTrackRef.current && albumArtRef.current && titleBarRef.current) {
@@ -72,13 +94,16 @@ const MusicPlayer: React.FC = () => {
 
   return (
     <div
-      className={`music-player`}
+      className={`music-player ${isMinimizing ? 'minimizing' : ''}`}  // 애니메이션 클래스 추가
       style={{
-        left: `${position.x}px`, 
-        top: `${position.y}px`, 
-        position: "absolute", 
+        left: `${position.x}px`,
+        top: `${position.y}px`,
+        position: "absolute",
         display: isMinimized ? "none" : "block",  // 최소화 시 플레이어 UI를 숨김
         zIndex: zIndex,  // z-index 적용
+        transform: isMinimizing ? `translate(${minimizedPosition.x - position.x}px, ${minimizedPosition.y - position.y}px) scale(0)` : 'none',
+        opacity: isMinimizing ? 0 : 1,
+        transition: 'transform 0.5s ease-in-out, opacity 0.5s ease-in-out',  // 애니메이션 설정
       }}
       ref={playerRef}
       onClick={() => bringAppToFront("music")}
@@ -96,7 +121,7 @@ const MusicPlayer: React.FC = () => {
         {/* 닫기 및 최소화 버튼 */}
         <div className="traffic-lights">
           <span className="close" onClick={handleCloseApp}></span>
-          <span className="minimize" onClick={() => minimizeApp("music")}></span>
+          <span className="minimize" onClick={handleMinimize}></span>
         </div>
         <span className="title">MusicPlayer</span>
       </div>
