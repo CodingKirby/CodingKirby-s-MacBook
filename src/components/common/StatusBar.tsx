@@ -33,6 +33,16 @@ const StatusBar: React.FC = () => {
         <span className="menu-item">Help</span>
       </div>
       <div className="right-section">
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(4, 0.8fr)',
+        }}>
+          <span className="menu-item"><i className="fas fa-fast-backward"></i></span>
+          <span className="menu-item"><i className="fas fa-pause"></i></span>
+          <span className="menu-item"><i className="fas fa-fast-forward"></i></span>
+          <span className="menu-item"><i className="fas fa-volume-up"></i></span>
+        </div>
+        
         <span className="menu-item"><i className="fas fa-wifi"></i></span>
         <span className="menu-item"><i className="fas fa-battery-three-quarters"></i></span>
         <span className="menu-item">{time}</span>
