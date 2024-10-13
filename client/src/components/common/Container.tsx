@@ -12,43 +12,64 @@ interface ContainerProps {
   onClick?: () => void;
 }
 
-const Container: React.FC<ContainerProps> = ({ title, appName, children, appStyle, contentStyle, titleBarStyle, onClick }) => {
+const Container: React.FC<ContainerProps> = ({
+  title,
+  appName,
+  children,
+  appStyle,
+  contentStyle,
+  titleBarStyle,
+  onClick,
+}) => {
   const { apps, closeApp, minimizeApp, maximizeApp, bringAppToFront } = useAppState();
 
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [position, setPosition] = useState({ x: 100, y: 100 });
+  const [previousPosition, setPreviousPosition] = useState<{ x: number; y: number }>({ x: 100, y: 100 }); // 이전 위치 저장
+  const [previousSize, setPreviousSize] = useState<{ width: number; height: number }>({ width: 400, height: 300 }); // 이전 크기 저장
   const [isDragging, setIsDragging] = useState(false);
   const [initialMousePos, setInitialMousePos] = useState({ x: 0, y: 0 });
   const [containerSize, setContainerSize] = useState({ width: 400, height: 300 });
   const [isResizing, setIsResizing] = useState(false);
   const [resizeDirection, setResizeDirection] = useState('');
   const [isMaximized, setIsMaximized] = useState(false);
-  const [isMinimizing, setIsMinimizing] = useState(false);  // minimize 애니메이션을 위한 상태 추가
+  const [isMinimizing, setIsMinimizing] = useState(false); // minimize 애니메이션을 위한 상태 추가
   const [minimizedPosition, setMinimizedPosition] = useState({ x: 0, y: 0 }); // minimizedPosition 상태
 
   const MIN_WIDTH = 200;
   const MIN_HEIGHT = 150;
+  const STATUSBAR_HEIGHT = 25; // 상태 표시줄 높이
 
   const animationFrameRef = useRef<number | null>(null);
 
-  // 로컬스토리지에 저장된 위치 불러오기
-  const loadPositionFromStorage = () => {
+  // 로컬스토리지에 저장된 위치와 크기 불러오기
+  const loadPositionAndSizeFromStorage = () => {
     const storedPosition = localStorage.getItem(`containerPosition_${appName}`);
+    const storedSize = localStorage.getItem(`containerSize_${appName}`);
+
     if (storedPosition) {
       const { x, y } = JSON.parse(storedPosition);
       setPosition({ x, y });
     }
+
+    if (storedSize && !isMaximized) {
+      const { width, height } = JSON.parse(storedSize);
+      setContainerSize({ width, height });
+    }
   };
 
-  // 위치를 로컬 스토리지에 저장
-  const savePositionToStorage = (x: number, y: number) => {
+  // 위치와 크기를 로컬 스토리지에 저장
+  const savePositionAndSizeToStorage = (x: number, y: number, width: number, height: number) => {
     localStorage.setItem(`containerPosition_${appName}`, JSON.stringify({ x, y }));
+    if (!isMaximized) {
+      localStorage.setItem(`containerSize_${appName}`, JSON.stringify({ width, height }));
+    }
   };
 
   const handleClose = () => {
     closeApp(appName as keyof typeof useAppState);
-    // 닫을 때 위치 저장
-    savePositionToStorage(position.x, position.y);
+    // 닫을 때 위치와 크기 저장
+    savePositionAndSizeToStorage(position.x, position.y, containerSize.width, containerSize.height);
   };
 
   const handleMinimize = () => {
@@ -66,19 +87,26 @@ const Container: React.FC<ContainerProps> = ({ title, appName, children, appStyl
       setTimeout(() => {
         minimizeApp(appName as keyof typeof useAppState); // 애니메이션이 끝난 후 최소화 상태로 변경
         setIsMinimizing(false); // 애니메이션 초기화
-        savePositionToStorage(position.x, position.y); // 최소화될 때 위치 저장
+        savePositionAndSizeToStorage(position.x, position.y, containerSize.width, containerSize.height); // 최소화될 때 위치와 크기 저장
       }, 500); // 애니메이션 시간과 맞춰서 0.5초 뒤에 최소화
     }
   };
 
   const handleMaximize = () => {
     if (isMaximized) {
-      // 최대화 취소 (기존 크기 및 위치 복원)
-      maximizeApp(appName as keyof typeof useAppState);
+      // 최대화 취소 (이전 크기 및 위치 복원)
+      setPosition(previousPosition); // 저장된 이전 위치로 복원
+      setContainerSize(previousSize); // 저장된 이전 크기로 복원
+      setIsMaximized(false); // 최대화 상태 해제
     } else {
-      // 화면 전체로 최대화
-      setPosition({ x: 0, y: 0 });
-      setContainerSize({ width: window.innerWidth, height: window.innerHeight / 100 * 70 });
+      // 최대화하기 전에 현재 크기 및 위치 저장
+      setPreviousPosition(position); // 현재 위치 저장
+      setPreviousSize(containerSize); // 현재 크기 저장
+
+      // 화면 전체로 최대화하되 상태바 영역은 제외
+      setPosition({ x: 0, y: STATUSBAR_HEIGHT });
+      setContainerSize({ width: window.innerWidth, height: window.innerHeight - STATUSBAR_HEIGHT });
+      setIsMaximized(true); // 최대화 상태로 설정
     }
   };
 
@@ -139,7 +167,9 @@ const Container: React.FC<ContainerProps> = ({ title, appName, children, appStyl
         animationFrameRef.current = requestAnimationFrame(() => {
           const newX = e.clientX - initialMousePos.x;
           const newY = e.clientY - initialMousePos.y;
-          setPosition({ x: newX, y: newY });
+          const boundedY = Math.max(25, newY);
+
+          setPosition({ x: newX, y: boundedY });
           animationFrameRef.current = null; // 다음 프레임을 위해 초기화
         });
       }
@@ -153,12 +183,12 @@ const Container: React.FC<ContainerProps> = ({ title, appName, children, appStyl
       animationFrameRef.current = null;
     }
     // 드래그 후 위치 저장
-    savePositionToStorage(position.x, position.y);
+    savePositionAndSizeToStorage(position.x, position.y, containerSize.width, containerSize.height);
   };
 
-  // 컴포넌트가 로드될 때 위치 불러오기
+  // 컴포넌트가 로드될 때 위치 및 크기 불러오기
   useEffect(() => {
-    loadPositionFromStorage();
+    loadPositionAndSizeFromStorage();
   }, []);
 
   useEffect(() => {
@@ -197,13 +227,15 @@ const Container: React.FC<ContainerProps> = ({ title, appName, children, appStyl
         top: position.y,
         position: 'absolute',
         zIndex: apps[appName as AppName].zIndex,
-        transform: isMinimizing ? `translate(${minimizedPosition.x - position.x}px, ${minimizedPosition.y - position.y}px) scale(0)` : 'none',
+        transform: isMinimizing
+          ? `translate(${minimizedPosition.x - position.x}px, ${minimizedPosition.y - position.y}px) scale(0)`
+          : 'none',
         opacity: isMinimizing ? 0 : 1,
         transition: 'transform 0.5s ease-in-out, opacity 0.5s ease-in-out', // 애니메이션 설정
       }}
       ref={containerRef}
       onClick={onClick}
-      onDoubleClick={handleMaximize} 
+      onDoubleClick={handleMaximize}
     >
       <div
         className="macos-titlebar"
