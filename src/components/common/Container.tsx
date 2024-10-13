@@ -6,11 +6,12 @@ interface ContainerProps {
   title: string;
   appName: AppName; 
   children: React.ReactNode;
-  appStyle?: React.CSSProperties; 
+  appStyle?: React.CSSProperties;
+  contentStyle?: React.CSSProperties;
   titleBarStyle?: React.CSSProperties;
 }
 
-const Container: React.FC<ContainerProps> = ({ title, appName, children, appStyle, titleBarStyle }) => {
+const Container: React.FC<ContainerProps> = ({ title, appName, children, appStyle, contentStyle, titleBarStyle }) => {
   const { apps, closeApp, minimizeApp, maximizeApp, bringAppToFront } = useAppState();
 
   const containerRef = useRef<HTMLDivElement | null>(null); 
@@ -158,7 +159,9 @@ const Container: React.FC<ContainerProps> = ({ title, appName, children, appStyl
         </div>
         <span className="title">{title}</span>
       </div>
-      <div className="content" ref={containerRef}>
+      <div className="content" ref={containerRef}
+        style={{ ...contentStyle }}
+      >
         {children}
       </div>
 
