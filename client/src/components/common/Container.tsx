@@ -235,7 +235,6 @@ const Container: React.FC<ContainerProps> = ({
       }}
       ref={containerRef}
       onClick={onClick}
-      onDoubleClick={handleMaximize}
     >
       <div
         className="macos-titlebar"
@@ -244,6 +243,7 @@ const Container: React.FC<ContainerProps> = ({
           ...titleBarStyle,
           cursor: 'grab',
         }}
+        onDoubleClick={handleMaximize}
       >
         <div className="traffic-lights">
           <span className="close" onClick={handleClose}></span>
