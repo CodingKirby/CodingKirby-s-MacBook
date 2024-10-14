@@ -28,8 +28,6 @@ const Mail: React.FC = () => {
   return (
     <Container title="Mail" appName="mail" appStyle={{ overflow: 'hidden' }}>
       <div className="mail-app">
-        
-
         <div className="mail-list">
            
           <h3>Inbox</h3>
