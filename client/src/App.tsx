@@ -3,6 +3,7 @@ import StatusBar from './components/common/StatusBar';
 import Safari from './components/apps/Safari';
 import MusicPlayer from './components/apps/MusicPlayer';
 
+import Memo from './components/apps/Memo';
 import Blog from './components/apps/Blog';
 import Mail from './components/apps/Mail';
 
@@ -20,6 +21,7 @@ const App: React.FC = () => {
           <StatusBar />
           <MusicPlayer />
           <Safari />
+          <Memo />
           <Blog />
           <Mail />
           <Dock />
