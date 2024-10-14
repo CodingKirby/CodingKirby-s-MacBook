@@ -4,6 +4,7 @@ import Safari from './components/apps/Safari';
 import MusicPlayer from './components/apps/MusicPlayer';
 
 import Memo from './components/apps/Memo';
+import Github from './components/apps/Github';
 import Blog from './components/apps/Blog';
 import Mail from './components/apps/Mail';
 
@@ -22,6 +23,7 @@ const App: React.FC = () => {
           <MusicPlayer />
           <Safari />
           <Memo />
+          <Github />
           <Blog />
           <Mail />
           <Dock />

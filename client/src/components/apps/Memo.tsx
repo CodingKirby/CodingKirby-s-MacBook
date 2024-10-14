@@ -23,7 +23,7 @@ interface Note {
 }
 
 const Memo: React.FC = () => {
-  const { apps, openApp } = useAppState();
+  const { apps } = useAppState();
 
   // Initialize state hooks at the top level
   const [folders, setFolders] = useState<Folder[]>([

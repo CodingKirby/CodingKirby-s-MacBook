@@ -1,19 +1,22 @@
 /* 컨테이너 스타일 */
 .container {
+    display:block;
+
     position: absolute;
     transform: translateX(-50%); /* 수평으로 정확히 중앙에 오도록 조정 */
     width: calc(70% - 4rem);
-    min-width: 30%;
-    min-height: 30%;
-    max-width: 100%;
-    max-height: 80%;
+    border-radius: 0.8rem;
+
     text-align: center;
+    justify-items: center;
+    align-items: top;
+
     background-color: #ffffff;
     color: #333;
     z-index: 1;
-    border-radius: 0.5rem;
+    
     overflow: hidden;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.8);
   }
 
   /* Container 애니메이션 */
@@ -31,7 +34,6 @@
 .container.minimizing {
   animation: minimize 0.5s forwards;
 }
-
 
   .resize-handle {
     position: absolute;
@@ -112,8 +114,11 @@
   
   /* 콘텐츠 영역 스타일 */
   .content {
-    overflow: scroll; /* 스크롤 가능한 영역 */
-    height: 100%; /* 상단바 높이만큼 뺀 나머지 높이 */
+    display:block;
+    width: 100%;
+    height: calc(100% - 1.8rem); /* 상단바 높이만큼 뺀 나머지 높이 */
+    position: relative;
+    overflow: scroll;
   }
 
   .projects {

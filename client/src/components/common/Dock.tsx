@@ -59,13 +59,6 @@ const Dock: React.FC = () => {
 
     bringAppToFront(appName as keyof typeof apps);
 
-    // 특정 앱에 대한 조건 처리
-    if (appName === 'github') {
-      // GitHub 페이지로 새 탭에서 이동
-      window.open('https://github.com/CodingKirby', '_blank');
-      return;
-    }
-
     if (appName === 'notion') {
       // Notion 페이지로 새 탭에서 이동
       window.open('https://calico-octave-0a0.notion.site/62b2692248d045bdb1796368054b3ac2?pvs=74', '_blank');
