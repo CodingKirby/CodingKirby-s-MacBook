@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useMusic } from '../../contexts/MusicContext'; // MusicContext 사용
-import VolumeModal from './VolumeModal'; // VolumeModal 가져오기
+import VolumeModal from '../apps/MusicPlayerVolume'; // VolumeModal 가져오기
 import '../../styles/Statusbar.css';
 
 const StatusBar: React.FC = () => {

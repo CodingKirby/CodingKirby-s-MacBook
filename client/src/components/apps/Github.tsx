@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAppState } from '../../contexts/AppContext';
 
 import Container from '../common/Container';
-import Profile from './Profile';  // 프로필 컴포넌트
+import Profile from './GithubProfile';  // 프로필 컴포넌트
 import '../../styles/Github.css';
 
 const imgUrl = process.env.REACT_APP_IMAGE_URL;

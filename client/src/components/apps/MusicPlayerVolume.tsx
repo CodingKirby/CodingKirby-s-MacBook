@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { useMusic } from '../../contexts/MusicContext'; // MusicContext 사용
-import '../../styles/VolumeModal.css'; // 필요한 CSS 스타일링
 
 interface VolumeModalProps {
   isVisible: boolean;
