@@ -23,7 +23,6 @@ const Blog: React.FC = () => {
       appStyle={{
         overflow: 'hidden',  // 스크롤을 없앰
       }}
-      onClick={() => bringAppToFront('blog')} // Container에 클릭 이벤트를 등록
     >
       <div
         style={{
