@@ -9,7 +9,7 @@ const MusicPlayer: React.FC = () => {
   const { apps, closeApp, minimizeApp, bringAppToFront } = useAppState();
   const { isPlaying, currentTrack, currentTime, duration, isBuffering,
     stopAndReset, togglePlayPause, playNextTrack, playPreviousTrack,
-    seekTo, updatePlayerVisualState } = useMusic();
+    seekTo, updatePlayerVisualState } = useMusic();  // startPlaying 대신 togglePlayPause 사용
   const { isRunning, isMinimized, zIndex } = apps.music;
 
   const [isDragging, setIsDragging] = useState(false);
@@ -22,6 +22,8 @@ const MusicPlayer: React.FC = () => {
   const playerTrackRef = useRef<HTMLDivElement | null>(null);
   const albumArtRef = useRef<HTMLImageElement | null>(null);
   const titleBarRef = useRef<HTMLDivElement | null>(null);
+
+  const [interactionDone, setInteractionDone] = useState(false);
 
   // 마우스를 눌렀을 때 드래그 시작
   const handleMouseDown = (e: React.MouseEvent) => {
@@ -82,6 +84,25 @@ const MusicPlayer: React.FC = () => {
       }, 500); // 애니메이션 시간과 맞춰서 0.5초 뒤에 최소화
     }
   };
+
+  // 사용자 상호작용을 트리거로 음악을 재생
+  const handleFirstInteraction = () => {
+    if (!interactionDone) {
+      togglePlayPause();  // 첫 상호작용 시 음악 재생
+      setInteractionDone(true);  // 첫 상호작용 이후 더 이상 트리거되지 않게 설정
+    }
+  };
+
+  // 페이지가 로드될 때 첫 사용자 상호작용 감지
+  useEffect(() => {
+    if (!interactionDone) {
+      window.addEventListener('click', handleFirstInteraction);  // 클릭 이벤트 감지
+    }
+
+    return () => {
+      window.removeEventListener('click', handleFirstInteraction);  // 이벤트 클리너
+    };
+  }, [interactionDone]);
 
   // isPlaying 상태에 따라 시각적 상태 업데이트
   useEffect(() => {
