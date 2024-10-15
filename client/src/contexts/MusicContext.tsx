@@ -1,13 +1,16 @@
 import React, { createContext, useContext, useRef, useState, useCallback, useEffect } from 'react';
 
+const imgUrl = process.env.REACT_APP_IMAGE_URL;
+const mp3Url = process.env.REACT_APP_MUSIC_URL;
 // 음원 정보
 const trackUrls = [
-  `${process.env.REACT_APP_MUSIC_URL}/1.mp3`,
-  `${process.env.REACT_APP_MUSIC_URL}/2.mp3`,
-];
-export const albums = ["Spirited Away", "Spirited Away"];
-export const trackNames = ["Inochi No Namae", "Itsumo Nando Demo"];
-export const albumArtworks = [`${process.env.REACT_APP_IMAGE_URL}/Album_1.png`, `${process.env.REACT_APP_IMAGE_URL}/Album_2.png`];
+  `${mp3Url}/1.mp3`, `${mp3Url}/2.mp3`, `${mp3Url}/3.mp3`,
+  `${mp3Url}/4.mp3`, `${mp3Url}/5.mp3`, `${mp3Url}/6.mp3`, `${mp3Url}/7.mp3`];
+export const albums = ["Spirited Away", "Spirited Away", "Howl's Moving Castle", "Yiruma", "Yiruma", "Higurashi When They Cry", "Inuyasha"];
+export const trackNames = ["Inochi No Namae", "Itsumo Nando Demo", "Merry-Go-Round of Life", "Kiss the Rain", "River Flows in You", "You", "Affections Touching Across Time"];
+export const albumArtworks = [
+  `${imgUrl}/Album_1.png`, `${imgUrl}/Album_2.png`, `${imgUrl}/Album_3.png`,
+  `${imgUrl}/Album_4.png`, `${imgUrl}/Album_5.png`, `${imgUrl}/Album_6.png`, `${imgUrl}/Album_7.png`];
 
 // 음악 상태와 제어 함수 타입 정의
 interface MusicContextType {
