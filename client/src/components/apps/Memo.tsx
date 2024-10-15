@@ -3,9 +3,7 @@ import { useAppState } from '../../contexts/AppContext';
 
 import '../../styles/Memo.css';
 import Container from '../common/Container';
-import { Search, Trash2, Type, AlignLeft, Grid, Share } from 'lucide-react';
-import { Input } from '../common/Input';
-import { Button } from '../common/Button';
+import { Trash2, Type, AlignLeft, Grid, Share, PenBox } from 'lucide-react';
 import { ScrollArea } from '../common/ScrollArea';
 
 // Define Folder and Note interfaces
@@ -28,21 +26,29 @@ const Memo: React.FC = () => {
   // Initialize state hooks at the top level
   const [folders, setFolders] = useState<Folder[]>([
     { id: '1', name: '모든 iCloud 메모' },
-    { id: '2', name: '메모' },
-    { id: '3', name: '공부' },
-    { id: '4', name: '아이디어' },
-    { id: '5', name: '스케치' },
+    { id: '2', name: '응원해요' },
+    { id: '3', name: '피드백' }
   ]);
 
   const [notes, setNotes] = useState<Note[]>([
-    { id: '1', title: '파스타 레시피', content: '1. 마늘, 올리브유 볶기\n2. 파스타 넣기\n...', date: '24. 10. 14.', folderId: '1' },
-    { id: '2', title: '책 읽기', content: '읽을 책 목록 정리', date: '24. 10. 13.', folderId: '2' },
-    { id: '3', title: '프로그래밍 공부', content: 'React, TypeScript 공부 기록', date: '24. 10. 12.', folderId: '3' },
+    { id: '1', title: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Nisl tincidunt eget nullam non.Quis hendrerit dolor magna eget est lorem ipsum dolor sit. Volutpat odio facilisis mauris sit amet massa. Commodo odio aenean sed adipiscing diam donec adipiscing tristique. Mi eget mauris pharetra et. Non tellus orci ac auctor augue. Elit at imperdiet dui accumsan sit. Ornare arcu dui vivamus arcu felis. Egestas integer eget aliquet nibh praesent. In hac habitasse platea dictumst quisque sagittis purus. Pulvinar elementum integer enim neque volutpat ac.', content: 'Senectus et netus et malesuada. Nunc pulvinar sapien et ligula ullamcorper malesuada proin. Neque convallis a cras semper auctor. Libero id faucibus nisl tincidunt eget. Leo a diam sollicitudin tempor id. A lacus vestibulum sed arcu non odio euismod lacinia. In tellus integer feugiat scelerisque. Feugiat in fermentum posuere urna nec tincidunt praesent. Porttitor rhoncus dolor purus non enim praesent elementum facilisis. Nisi scelerisque eu ultrices vitae auctor eu augue ut lectus. Ipsum faucibus vitae aliquet nec ullamcorper sit amet risus. Et malesuada fames ac turpis egestas sed. Sit amet nisl suscipit adipiscing bibendum est ultricies. Arcu ac tortor dignissim convallis aenean et tortor at. Pretium viverra suspendisse potenti nullam ac tortor vitae purus. Eros donec ac odio tempor orci dapibus ultrices. Elementum nibh tellus molestie nunc. Et magnis dis parturient montes nascetur. Est placerat in egestas erat imperdiet. Consequat interdum varius sit amet mattis vulputate enim.', date: '24. 10. 14.', folderId: '1' },
+    { id: '2', title: 'Lorem ipsum dolor sit amet,', content: 'consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', date: '24. 10. 14.', folderId: '1' },
+    { id: '3', title: 'Lorem ipsum dolor sit amet,', content: 'consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', date: '24. 10. 14.', folderId: '1' },
+    { id: '4', title: 'Lorem ipsum dolor sit amet,', content: 'consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', date: '24. 10. 14.', folderId: '1' },
+    { id: '5', title: 'Lorem ipsum dolor sit amet,', content: 'consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', date: '24. 10. 14.', folderId: '1' },
+    { id: '6', title: '잘 보고 가요~', content: '멋져요^^', date: '24. 10. 13.', folderId: '2' },
+    { id: '7', title: '피드백', content: '사진 앱이랑 메시지 앱은 안되나요?? 🤔', date: '24. 10. 12.', folderId: '3' },
   ]);
 
   const [selectedNote, setSelectedNote] = useState<Note | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedFolder, setSelectedFolder] = useState<string>('1');
+  const [isScrolled, setIsScrolled] = useState(false); // Scroll state
+
+  const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
+    const scrollTop = event.currentTarget.scrollTop;
+    setIsScrolled(scrollTop > 50);
+  };
 
   // 앱 상태 가져오기
   const memoAppState = apps['memo'];
@@ -63,6 +69,7 @@ const Memo: React.FC = () => {
       <div className="memo-container">
         {/* Left Column - Folders */}
         <div className="folder-list">
+          <i className="fa-brands fa-apple"></i>
           <h2>iCloud 메모</h2>
           {folders.map(folder => (
             <div
@@ -75,13 +82,12 @@ const Memo: React.FC = () => {
           ))}
         </div>
 
-        {/* Middle Column - Notes List */}
         <div className="notes-list">
           <div className="search-input">
-            <Input
+            <i className="fa-solid fa-magnifying-glass"></i>
+            <input
               type="text"
               placeholder="모든 메모 검색"
-              className="w-full"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -105,19 +111,21 @@ const Memo: React.FC = () => {
           </ScrollArea>
         </div>
 
-        {/* Right Column - Note Content */}
-        <div className="note-content">
+        <div className="note-content" onScroll={handleScroll}>
           {selectedNote && (
             <>
-              <div className="note-tools">
+              <div className={`note-tools ${isScrolled ? 'scrolled' : ''}`}>
                 <div>
-                  <Button variant="ghost" size="icon"><Type className="h-4 w-4" /></Button>
-                  <Button variant="ghost" size="icon"><AlignLeft className="h-4 w-4" /></Button>
-                  <Button variant="ghost" size="icon"><Grid className="h-4 w-4" /></Button>
+                  <button><Trash2 className='icon'/></button>
                 </div>
                 <div>
-                  <Button variant="ghost" size="icon"><Share className="h-4 w-4" /></Button>
-                  <Button variant="ghost" size="icon"><Trash2 className="h-4 w-4" /></Button>
+                  <button><Type className='icon'/></button>
+                  <button><AlignLeft className='icon'/></button>
+                  <button><Grid className='icon'/></button>
+                </div>
+                <div>
+                  <button><Share className='icon'/></button>
+                  <button><PenBox className='icon'/></button>
                 </div>
               </div>
               <h2 className="text-2xl font-bold mb-4">{selectedNote.title}</h2>

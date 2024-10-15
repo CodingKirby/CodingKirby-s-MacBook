@@ -2,64 +2,101 @@
 
 .memo-container {
     display: flex;
-    height: 100vh;
-    background-color: #f8fafc; /* 좀 더 밝고 세련된 배경색 */
+    height: 100%;
+    background-color: #f8fafc;
+    overflow: hidden;
   }
   
   /* Left Column - Folders */
   .folder-list {
     width: 20%;
     background-color: #f3f4f6;
-    padding: 1.5rem;
-    border-right: 1px solid #d1d5db; /* 구분선 추가 */
+    padding: 1rem 0.5rem;
+    border-right: 1px solid #d1d5db;
+    transition: width 0.3s ease;
+    overflow-y: scroll;
+    scrollbar-width: none;
   }
   
   .folder-list h2 {
     font-weight: 600;
     font-size: 1.25rem;
     color: #374151;
-    margin-bottom: 1.5rem; /* 더 넓은 여백 */
+    margin-bottom: 1rem;
+    text-align: center;
   }
-  
+
   .folder-item {
+    width: 100%;
     padding: 0.75rem;
     cursor: pointer;
-    border-radius: 0.5rem;
-    transition: background-color 0.2s ease, transform 0.2s ease; /* 부드러운 애니메이션 */
+    border-radius: 1rem;
+    transition: background-color 0.2s ease, transform 0.2s ease;
     margin-bottom: 0.75rem;
     font-size: 1rem;
-    color: #4b5563; /* 중간 밝기의 텍스트 색상 */
+    color: #4b5563;
+    word-break: keep-all;
+    white-space: normal;
+    text-align: left;
   }
   
   .folder-item:hover {
     background-color: #e2e8f0;
-    transform: translateY(-2px); /* Hover 시 살짝 떠오르는 효과 */
+    transform: translateY(-2px);
   }
   
   .folder-item.active {
-    background-color: #fde68a;
-    color: #111827;
-    font-weight: 500; /* 활성화된 폴더에 대해 더 진한 폰트 */
+    background-color: #edbb4d;
+    color: #ffffff;
+    font-weight: 500;
   }
   
   /* Middle Column - Notes List */
   .notes-list {
-    width: 35%;
+    width: 30%;
     background-color: #ffffff;
-    border-right: 1px solid #e5e7eb; /* 미세한 구분선 */
+    border-right: 1px solid #e5e7eb;
+    overflow-y: scroll;
+    scrollbar-width: none;
   }
   
   .notes-list .search-input {
-    padding: 1.25rem;
+    width: 100%;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    padding: 1rem;
     border-bottom: 1px solid #e5e7eb;
     background-color: #f8fafc;
+  }
+
+  .notes-list .search-input input {
+    width: 100%;
+    padding: 0.5rem 1rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.7rem;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    background-color: #f1f5f9;
+    transition: border-color 0.2s;
+  }
+
+  .notes-list .search-input input:focus {
+    outline: none;
+    background-color: #ffffff;
+  }
+
+  .no-notes {
+    padding: 1rem;
+    text-align: center;
+    color: #6b7280;
   }
   
   .notes-list .note-item {
     padding: 1.25rem;
     cursor: pointer;
     border-bottom: 1px solid #f3f4f6;
-    transition: background-color 0.2s ease;
+    transition: background-color 0.2s ease, transform 0.2s ease;
   }
   
   .notes-list .note-item:hover {
@@ -67,50 +104,103 @@
   }
   
   .notes-list .note-item.active {
-    background-color: #fde68a;
+    background-color: #edbb4d;
   }
   
   .notes-list .note-title {
     font-weight: 600;
     color: #1f2937;
-    font-size: 1.125rem; /* 약간 더 큰 폰트 */
+    font-size: 1.125rem;
+    text-align: left;
+    text-overflow: ellipsis;
+    word-break: break-word;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  .notes-list .note-item.active .note-title {
+    color: #ffffff;
+  }
+
+  .notes-list .note-item.active .note-date {
+    color: #ffffff;
+  }
+
+  .notes-list .note-item.active .note-content {
+    color: #ffffff;
   }
   
   .notes-list .note-date {
     font-size: 0.875rem;
     color: #6b7280;
+    text-align: left;
+    padding-bottom: 0.25rem;
   }
   
   .notes-list .note-content {
+    width: 100%;
+    height: 100%;
     font-size: 0.875rem;
     color: #6b7280;
     text-overflow: ellipsis;
-    white-space: nowrap;
+    word-break: break-all;
     overflow: hidden;
+    text-align: left;
+    padding: 0;
+    background-color: transparent;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2; /* 원하는 최대 줄 수로 변경 (예: 3줄까지 표시) */
+    line-clamp: 2; /* 줄 수를 지정 */
   }
+
   
   /* Right Column - Note Content */
   .note-content {
-    flex-grow: 1;
+    width: 50%;
+    height: 100%;
+    text-align: left;
     background-color: #ffffff;
-    padding: 2rem;
-  }
-  
-  .note-content h2 {
-    font-size: 1.75rem;
-    font-weight: 700; /* 제목을 좀 더 강조 */
-    color: #1f2937;
-    margin-bottom: 1.25rem;
+    overflow-y: scroll;
+    scrollbar-width: none;
   }
   
   .note-content .note-tools {
+    width: 100%;
+    height: 3rem;
     display: flex;
+    position: sticky;
+    top: 0;
     justify-content: space-between;
-    margin-bottom: 1.5rem; /* 아이콘과 내용 사이 여백을 늘림 */
+    align-items: center;
+    padding: 0;
+    margin: 0;
+    background-color: #ffffff;
+  }
+
+  .note-content .note-tools.scrolled {
+    border-bottom: 1px solid #d1d5db;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   }
   
-  .note-content .note-tools .icon-button {
-    margin-right: 0.75rem;
+  .note-content .note-tools .icon {
+    color: #edbb4d;
+    border-radius: 0.5rem;
+    transition: background-color 0.2s ease;
+    width: 1.2rem;
+    height: 1.2rem;
+    overflow: visible;
+  }
+
+  .note-content h2 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #1f2937;
+    text-align: left;
+    max-height: 5rem;
+    margin: 1rem 1.2rem 0.5rem;
+    overflow-y: scroll;
+    scrollbar-width: none;
   }
   
   .note-content p {
@@ -118,6 +208,8 @@
     font-size: 1.125rem; /* 본문을 약간 더 크게 */
     color: #4b5563; /* 가독성 좋은 중간 밝기의 텍스트 */
     line-height: 1.6;
+    margin: 0.5rem 1.2rem;
+    padding-bottom: 1.5rem;
   }
   
   /* 버튼과 아이콘 스타일 향상 */
@@ -133,29 +225,3 @@
   button:hover {
     background-color: #f3f4f6;
   }
-  
-  .icon-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.5rem;
-    background-color: transparent;
-    border-radius: 0.375rem;
-    transition: background-color 0.2s ease;
-  }
-  
-  .icon-button:hover {
-    background-color: #e5e7eb;
-  }
-  
-  .icon-button svg {
-    color: #4b5563;
-    width: 1.25rem;
-    height: 1.25rem;
-  }
-  
-  .icon-button:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(237, 233, 254, 0.75);
-  }
-  
