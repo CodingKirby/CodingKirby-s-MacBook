@@ -59,9 +59,9 @@ const Memo: React.FC = () => {
   if (!isRunning || isMinimized) return null;
 
   // Memo filtering based on folder and search query
-  const filteredNotes = notes.filter(note =>
-    note.folderId === selectedFolder &&
-    (note.title.includes(searchQuery) || note.content.includes(searchQuery))
+  const filteredNotes = notes.filter(note => 
+    (selectedFolder === '1' || note.folderId === selectedFolder) && // Show all notes if "모든 iCloud 메모" is selected
+    (note.title.includes(searchQuery) || note.content.includes(searchQuery)) // Filter by search query
   );
 
   return (
