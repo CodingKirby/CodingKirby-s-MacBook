@@ -195,12 +195,12 @@ const Memo: React.FC = () => {
         </div>
 
         <div className="memo-content" onScroll={handleScroll}>
-          <div className={`memo-tools ${isScrolled ? 'scrolled' : ''}`}>
+        <div className={`memo-tools ${isScrolled ? 'scrolled' : ''}`}
+        style={{ display: 'flex', justifyContent: 'space-between', padding: '0.5rem' }}>
             {isCreating ? (
-              <div>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
                 <button onClick={handleResetMemo}>
-                  <i className="fa-solid fa-delete-left"
-                  style={{ fontSize: '1.2rem', color: '#edbb4d' }}></i>
+                  <i className="fa-solid fa-delete-left" style={{ fontSize: '1.2rem', color: '#edbb4d' }}></i>
                 </button>
                 <button onClick={() => {
                   if (!newMemo.title || !newMemo.content) {
@@ -208,7 +208,7 @@ const Memo: React.FC = () => {
                   } else {
                     setShowPasswordModal(true);
                   }
-                }}>
+                }} style={{ marginLeft: 'auto' }}>
                   <i className="fa-solid fa-check" style={{ fontSize: '1.2rem', color: newMemo.title && newMemo.content ? '#edbb4d' : 'gray' }}></i>
                 </button>
               </div>
