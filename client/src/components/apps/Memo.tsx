@@ -20,7 +20,12 @@ const Memo: React.FC = () => {
     isCreating, newMemo, showPasswordModal, showErrorModal,
     setSearchQuery, setSelectedFolder, setMemos, setSelectedMemo, 
     setIsCreating, setNewMemo, setShowPasswordModal, setShowErrorModal,
-    fetchFoldersAndMemos, createMemo, resetMemoState, resetMemoCreateState
+    fetchFoldersAndMemos, createMemo, resetMemoState, resetMemoCreateState,
+
+    filteredMemos, selectMemoIfExists, fetchFoldersAndSetFirstMemo, fetchFoldersAndSetSelectedMemo,
+    fetchFoldersAndSetMemoOnFolderChange, updateMemoOnFolderChange, filterMemosByFolder,
+    setNewMemoAndSelect, updateMemosWithNewMemo, matchesSearchQuery
+
   } = useMemoContext();
 
   const memoAppState = apps['memo'];
@@ -33,25 +38,6 @@ const Memo: React.FC = () => {
     handleAppStateChange();
   }, [isRunning, isMinimized]);
 
-  // 폴더 변경 시 처리
-  useEffect(() => {
-    if (isCreating) {
-      // 폴더 변경 시 새로운 메모의 folder_id 업데이트
-      setNewMemo({ ...newMemo, folder_id: selectedFolder });
-    }
-    fetchFoldersAndSetMemoOnFolderChange();
-  }, [selectedFolder]);
-  
-  // 메모 편집 중일 때 내용이 리스트에 동기화되도록 함
-  useEffect(() => {
-    if (selectedMemo && selectedMemo.id === newMemo.id) {
-      // memos 리스트에서 편집 중인 메모를 업데이트
-      setMemos((prevMemos) => 
-        prevMemos.map((memo) => memo.id === newMemo.id ? { ...memo, ...newMemo } : memo)
-      );
-    }
-  }, [newMemo, selectedMemo, setMemos]);
-
   const handleAppStateChange = () => {
     if (!isRunning) resetMemoState();
     if (isRunning && !isMinimized) {
@@ -60,79 +46,18 @@ const Memo: React.FC = () => {
     }
   };
 
-  const fetchFoldersAndSetFirstMemo = async () => {
-    await fetchFoldersAndMemos();
-    setFirstMemoForSelectedFolder();
-  };
-
-  const setFirstMemoForSelectedFolder = () => {
-    const folderMemos = filterMemosByFolder(selectedFolder);
-    setSelectedMemo(folderMemos.length ? folderMemos[0] : null);
-  };
-
-  const fetchFoldersAndSetSelectedMemo = async () => {
-    await fetchFoldersAndMemos();
-    selectMemoIfExists();
-  };
-
-  const selectMemoIfExists = () => {
-    const selectedMemoId = memos.find(memo => memo.id === selectedMemo?.id);
-    if (selectedMemoId) setSelectedMemo(selectedMemoId);
-  };
-
-  const fetchFoldersAndSetMemoOnFolderChange = async () => {
-    await fetchFoldersAndMemos();
-    updateMemoOnFolderChange();
-  };
-
-  const updateMemoOnFolderChange = () => {
-    const folderMemos = filterMemosByFolder(selectedFolder);
-    if (!isCreating) {
-      setSelectedMemo(folderMemos.length ? folderMemos[0] : null);
-    } else {
-      setNewMemoAndSelect();
-    }
-  };
-
-  const filterMemosByFolder = (folderId: number) =>
-    folderId === 1 ? memos : memos.filter(memo => memo.folder_id === folderId);
-
-  const setNewMemoAndSelect = () => {
-    const tempMemo = { ...newMemo, folder_id: selectedFolder };
-    updateMemosWithNewMemo(tempMemo);
-  };
-
-  const updateMemosWithNewMemo = (tempMemo: any) => {
-    setMemos([tempMemo, ...memos.filter(memo => memo.id !== newMemo.id)]);
-    setSelectedMemo(tempMemo);
-  };
-
   const handleResetMemo = () => {
     resetMemoCreateState();
     setSelectedMemo(
       memos.find(memo => memo.id !== 0 && memo.folder_id === selectedFolder) || null
     );
   };
-
+  
   const handleCreateMemo = async () => {
     await createMemo();
   };
   
   const handleScroll = (event: React.UIEvent<HTMLDivElement>) => setIsScrolled(event.currentTarget.scrollTop > 50);
-
-  const matchesSearchQuery = (memo: any) =>
-    (memo.title?.includes(searchQuery) || '') || (memo.content?.includes(searchQuery) || '');
-
-  const filteredMemos = memos.filter((memo) => {
-    // 1. 폴더가 1번일 때는 모든 메모를 보여줌
-    const isInSelectedFolder = selectedFolder === 1 || memo.folder_id === selectedFolder;
-  
-    // 2. 검색어가 있으면 검색어에 맞는 메모만 필터링
-    const matchesSearchQuery = (memo.title?.includes(searchQuery) || '') || (memo.content?.includes(searchQuery) || '');
-  
-    // 3. 폴더와 검색 조건 모두 만족하는 메모만 반환
-    return isInSelectedFolder && matchesSearchQuery;
-  });
 
   // 앱이 실행 중이지 않거나 최소화된 경우에는 렌더링하지 않음
   if (!isRunning || isMinimized) return null;

@@ -36,6 +36,18 @@ export interface MemoContextProps {
   deleteMemo: (id: string, password: string) => Promise<void>;
   resetMemoState: () => void;
   resetMemoCreateState: () => void;
+
+  filteredMemos: Memo[];
+  fetchFoldersAndSetFirstMemo: () => Promise<void>;
+  setFirstMemoForSelectedFolder: () => void;
+  fetchFoldersAndSetSelectedMemo: () => Promise<void>;
+  selectMemoIfExists: (id: number) => void;
+  fetchFoldersAndSetMemoOnFolderChange: () => Promise<void>;
+  updateMemoOnFolderChange: () => void;
+  filterMemosByFolder: (folderId: number) => Memo[];
+  setNewMemoAndSelect: () => void;
+  updateMemosWithNewMemo: (tempMemo: Memo) => void;
+  matchesSearchQuery: (memo: Memo) => boolean;
 }
 
 export interface FolderListProps {
