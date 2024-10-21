@@ -13,7 +13,7 @@ import SearchInput from './memo/SearchInput';
 
 
 const Memo: React.FC = () => {
-  const { apps, closeApp } = useAppState();
+  const { apps } = useAppState();
   const {
     memos, folders, selectedFolder, selectedMemo, searchQuery,
     isCreating, newMemo, showPasswordModal, showErrorModal,
@@ -40,6 +40,16 @@ const Memo: React.FC = () => {
     }
     fetchFoldersAndSetMemoOnFolderChange();
   }, [selectedFolder]);
+  
+  // 메모 편집 중일 때 내용이 리스트에 동기화되도록 함
+  useEffect(() => {
+    if (selectedMemo && selectedMemo.id === newMemo.id) {
+      // memos 리스트에서 편집 중인 메모를 업데이트
+      setMemos((prevMemos) => 
+        prevMemos.map((memo) => memo.id === newMemo.id ? { ...memo, ...newMemo } : memo)
+      );
+    }
+  }, [newMemo, selectedMemo, setMemos]);
 
   const handleAppStateChange = () => {
     if (!isRunning) resetMemoState();
@@ -47,10 +57,6 @@ const Memo: React.FC = () => {
       fetchFoldersAndSetFirstMemo();
       fetchFoldersAndSetSelectedMemo();
     }
-  };
-
-  const handleClose = () => {
-    closeApp('memo'); // 앱을 닫는 로직 실행
   };
 
   const fetchFoldersAndSetFirstMemo = async () => {
@@ -106,10 +112,6 @@ const Memo: React.FC = () => {
       memos.find(memo => memo.id !== 0 && memo.folder_id === selectedFolder) || null
     );
   };
-
-  useEffect(() => {
-    console.log('Memos updated:', memos);
-  }, [memos]); // This runs when `memos` is updated
 
   const handleCreateMemo = async () => {
     await createMemo();
