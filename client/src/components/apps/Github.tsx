@@ -75,7 +75,7 @@ const Github: React.FC = () => {
         </div>
 
         <div className="right-section">
-          <Profile />
+          <Profile/>
           <h2>📌 Pinned Repositories</h2>
           <div className="repos-list">
             {featuredRepos.map((repo) => (
