@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useAppState } from '../../contexts/AppContext';
-import { FolderListProps, SearchInputProps, MemoItemProps } from '../../types/MemoTypes';
 import { useMemoContext } from '../../contexts/MemoContext';
 import '../../styles/Memo.css';
 
@@ -10,6 +9,8 @@ import { ScrollArea } from '../common/ScrollArea';
 import { Trash2, Type, AlignLeft, Grid, Share, PenBox } from 'lucide-react';
 
 import SearchInput from './memo/SearchInput';
+import FolderList from './memo/FolderList';
+import MemoItem from './memo/MemoItem';
 
 
 const Memo: React.FC = () => {
@@ -116,7 +117,7 @@ const Memo: React.FC = () => {
   const handleCreateMemo = async () => {
     await createMemo();
   };
-
+  
   const handleScroll = (event: React.UIEvent<HTMLDivElement>) => setIsScrolled(event.currentTarget.scrollTop > 50);
 
   const matchesSearchQuery = (memo: any) =>
@@ -131,42 +132,7 @@ const Memo: React.FC = () => {
   
     // 3. 폴더와 검색 조건 모두 만족하는 메모만 반환
     return isInSelectedFolder && matchesSearchQuery;
-  });  
-
-  const FolderList: React.FC<FolderListProps> = ({ folders, selectedFolder, setSelectedFolder }) => (
-    <div className="folder-list">
-      <i className="fa-brands fa-apple"></i>
-      <h2>iCloud 메모</h2>
-      {folders.length === 0 ? (
-        <p>폴더가 없습니다</p>
-      ) : (
-        folders.map(folder => (
-          <div
-            key={folder.id}
-            className={`folder-item ${selectedFolder === folder.id ? 'active' : ''}`}
-            onClick={() => setSelectedFolder(folder.id)}
-          >
-            {folder.title}
-          </div>
-        ))
-      )}
-    </div>
-  );
-  
-  const MemoItem: React.FC<MemoItemProps> = ({ memo, isActive, setSelectedMemo, folders }) => {
-    const folderName = folders.find(folder => folder.id === memo.folder_id)?.title || 'Unknown Folder';
-    return (
-      <div className={`memo-item ${isActive ? 'active' : ''}`} onClick={() => setSelectedMemo(memo)}>
-        <h3 className="memo-title">{memo.title}</h3>
-        <p className="memo-date">{memo.date}</p>
-        <p className="memo-content">{memo.content}</p>
-        <p className="memo-content">
-          <i className="fa-solid fa-folder"></i>
-          {folderName}
-        </p>
-      </div>
-    );
-  };
+  });
 
   // 앱이 실행 중이지 않거나 최소화된 경우에는 렌더링하지 않음
   if (!isRunning || isMinimized) return null;
@@ -186,7 +152,11 @@ const Memo: React.FC = () => {
               filteredMemos.map(memo => (
                 <MemoItem 
                   key={memo.id}
-                  memo={memo} 
+                  memo={{
+                    ...memo,
+                    title: memo.title || '새로운 메모',
+                    content: memo.content || '작성 중...'
+                  }} 
                   isActive={selectedMemo?.id === memo.id} 
                   setSelectedMemo={setSelectedMemo} 
                   folders={folders} 
