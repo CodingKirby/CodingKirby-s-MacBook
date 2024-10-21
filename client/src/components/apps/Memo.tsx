@@ -20,11 +20,9 @@ const Memo: React.FC = () => {
     isCreating, newMemo, showPasswordModal, showErrorModal,
     setSearchQuery, setSelectedFolder, setMemos, setSelectedMemo, 
     setIsCreating, setNewMemo, setShowPasswordModal, setShowErrorModal,
-    fetchFoldersAndMemos, createMemo, resetMemoState, resetMemoCreateState,
+    createMemo, resetMemoState, resetMemoCreateState,
 
-    filteredMemos, selectMemoIfExists, fetchFoldersAndSetFirstMemo, fetchFoldersAndSetSelectedMemo,
-    fetchFoldersAndSetMemoOnFolderChange, updateMemoOnFolderChange, filterMemosByFolder,
-    setNewMemoAndSelect, updateMemosWithNewMemo, matchesSearchQuery
+    filteredMemos, fetchFoldersAndSetFirstMemo, fetchFoldersAndSetSelectedMemo
 
   } = useMemoContext();
 
@@ -37,6 +35,13 @@ const Memo: React.FC = () => {
   useEffect(() => {
     handleAppStateChange();
   }, [isRunning, isMinimized]);
+
+  useEffect(() => {
+    if (isCreating) {
+      // 폴더 변경 시 새로운 폴더 ID를 반영하여 임시 메모를 생성
+      setNewMemo((prev) => ({ ...prev, folder_id: selectedFolder }));
+    }
+  }, [selectedFolder, isCreating]);  
 
   const handleAppStateChange = () => {
     if (!isRunning) resetMemoState();

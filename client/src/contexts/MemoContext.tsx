@@ -149,8 +149,19 @@ export const MemoProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const fetchFoldersAndSetMemoOnFolderChange = async () => {
     await fetchFoldersAndMemos();
-    updateMemoOnFolderChange();
-  };
+    
+    // 폴더 변경 후 새 메모 생성 시 임시 메모가 제대로 추가되도록 로직 수정
+    if (isCreating) {
+      const tempMemo = { ...newMemo, folder_id: selectedFolder };
+      
+      // 현재 선택된 폴더에 맞는 임시 메모를 추가
+      updateMemosWithNewMemo(tempMemo);
+    } else {
+      // 폴더 변경 후 선택된 폴더에 맞는 첫 번째 메모를 선택
+      const folderMemos = filterMemosByFolder(selectedFolder);
+      setSelectedMemo(folderMemos.length ? folderMemos[0] : null);
+    }
+  };  
 
   const updateMemoOnFolderChange = () => {
     const folderMemos = filterMemosByFolder(selectedFolder);
@@ -178,9 +189,18 @@ export const MemoProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const matchesSearchQuery = (memo: any) =>
     (memo.title?.includes(searchQuery) || '') || (memo.content?.includes(searchQuery) || '');
 
-  const filteredMemos = memos.filter((memo) => {
+  const filteredMemos = memos
+  .filter((memo) => {
     const isInSelectedFolder = selectedFolder === 1 || memo.folder_id === selectedFolder;
     return isInSelectedFolder && matchesSearchQuery(memo);
+  })
+  .sort((a, b) => {
+    // 1번 폴더에서 id가 1인 메모를 상단 고정
+    if (selectedFolder === 1) {
+      if (a.id === 1) return -1; // a가 id가 1인 메모인 경우 상단
+      if (b.id === 1) return 1;  // b가 id가 1인 메모인 경우 하단
+    }
+    return b.id - a.id; // 그 외 메모는 id 기준으로 내림차순 정렬
   });
 
   return (
