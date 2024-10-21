@@ -372,15 +372,14 @@
   }
   
   .volume-slider {
-    -webkit-appearance: none;
     display: flex;
     width: 9rem;
     height: 3rem;
     border-radius: 2rem;
     transform: rotate(-90deg);
     opacity: 0;
-
     z-index: 100;
+    cursor: pointer;
   }
   
   .volume-slider::-webkit-slider-thumb {

@@ -1,6 +1,6 @@
 /* Path: client/src/styles/MemoApp.css */
 
-.memo-container {
+  .memo-container {
     display: flex;
     height: 100%;
     background-color: #f8fafc;
@@ -65,18 +65,16 @@
     height: 3rem;
     display: flex;
     align-items: center;
-    padding: 1rem;
+    padding: 0.5rem;
     border-bottom: 1px solid #e5e7eb;
     background-color: #f8fafc;
   }
 
   .notes-list .search-input input {
     width: 100%;
-    padding: 0.5rem 1rem;
+    padding: 0.3rem 1rem;
     border: 1px solid #d1d5db;
     border-radius: 0.7rem;
-    margin-left: 0.5rem;
-    margin-right: 0.5rem;
     background-color: #f1f5f9;
     transition: border-color 0.2s;
   }
@@ -92,22 +90,22 @@
     color: #6b7280;
   }
   
-  .notes-list .note-item {
+  .notes-list .memo-item {
     padding: 1.25rem;
     cursor: pointer;
     border-bottom: 1px solid #f3f4f6;
     transition: background-color 0.2s ease, transform 0.2s ease;
   }
   
-  .notes-list .note-item:hover {
+  .notes-list .memo-item:hover {
     background-color: #f1f5f9;
   }
   
-  .notes-list .note-item.active {
+  .notes-list .memo-item.active {
     background-color: #edbb4d;
   }
   
-  .notes-list .note-title {
+  .notes-list .memo-title {
     font-weight: 600;
     color: #1f2937;
     font-size: 1.125rem;
@@ -118,26 +116,28 @@
     overflow: hidden;
   }
 
-  .notes-list .note-item.active .note-title {
+  .notes-list .memo-item.active .memo-title {
     color: #ffffff;
   }
 
-  .notes-list .note-item.active .note-date {
+  .notes-list .memo-item.active .memo-date {
+    font-size: 0.7rem;
     color: #ffffff;
   }
 
-  .notes-list .note-item.active .note-content {
+  .notes-list .memo-item.active .memo-content {
+    font-size: 0.875rem;
     color: #ffffff;
   }
   
-  .notes-list .note-date {
-    font-size: 0.875rem;
+  .notes-list .memo-date {
+    font-size: 0.7rem;
     color: #6b7280;
     text-align: left;
     padding-bottom: 0.25rem;
   }
   
-  .notes-list .note-content {
+  .notes-list .memo-content {
     width: 100%;
     height: 100%;
     font-size: 0.875rem;
@@ -146,17 +146,20 @@
     word-break: break-all;
     overflow: hidden;
     text-align: left;
-    padding: 0;
+    margin-bottom: 0.2rem;
     background-color: transparent;
     display: -webkit-box;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2; /* 원하는 최대 줄 수로 변경 (예: 3줄까지 표시) */
-    line-clamp: 2; /* 줄 수를 지정 */
+    -webkit-line-clamp: 1; /* 원하는 최대 줄 수로 변경 (예: 3줄까지 표시) */
+    line-clamp: 1; /* 줄 수를 지정 */
   }
 
-  
+  .notes-list .memo-content i {
+    padding-right: 0.5rem;
+  }
+
   /* Right Column - Note Content */
-  .note-content {
+  .memo-content {
     width: 50%;
     height: 100%;
     text-align: left;
@@ -165,7 +168,7 @@
     scrollbar-width: none;
   }
   
-  .note-content .note-tools {
+  .memo-content .memo-tools {
     width: 100%;
     height: 3rem;
     display: flex;
@@ -178,12 +181,12 @@
     background-color: #ffffff;
   }
 
-  .note-content .note-tools.scrolled {
+  .memo-content .memo-tools.scrolled {
     border-bottom: 1px solid #d1d5db;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   }
   
-  .note-content .note-tools .icon {
+  .memo-content .memo-tools .icon {
     color: #edbb4d;
     border-radius: 0.5rem;
     transition: background-color 0.2s ease;
@@ -192,8 +195,8 @@
     overflow: visible;
   }
 
-  .note-content h2 {
-    font-size: 1.75rem;
+  .memo-content h2 {
+    font-size: 1.2rem;
     font-weight: 700;
     color: #1f2937;
     text-align: left;
@@ -203,9 +206,9 @@
     scrollbar-width: none;
   }
   
-  .note-content p {
+  .memo-content p {
     white-space: pre-wrap;
-    font-size: 1.125rem; /* 본문을 약간 더 크게 */
+    font-size: 1rem; /* 본문을 약간 더 크게 */
     color: #4b5563; /* 가독성 좋은 중간 밝기의 텍스트 */
     line-height: 1.6;
     margin: 0.5rem 1.2rem;
@@ -225,3 +228,153 @@
   button:hover {
     background-color: #f3f4f6;
   }
+
+  .create-memo-form {
+    font-family: "MacSystemFont";
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+  }
+
+  .create-memo-title {
+    font-family: 'MacSystemFont';
+    font-size: 1.2rem;
+    font-weight: 700;
+    width: 100%;
+    padding: 0.5rem 1rem;
+    color: #1f2937;
+    text-align: left;
+    border: none;
+    border-radius: 0.8rem;
+  }
+
+  .create-memo-title::placeholder {
+    color: #6b7280;
+  }
+
+  /*
+  .create-memo-title:focus {
+    color: #6b7280;
+    border: #f3f4f6 1px solid;
+    box-shadow: inset 0 -1rem 1rem 0.2rem rgba(0, 0, 0, 0.1);
+  }
+  */
+
+  .create-memo-content {
+    font-family: 'MacSystemFont';
+    font-size: 1rem;
+    font-weight: 500;
+    width: 100%;
+    height: 100%;
+    padding: 0.5rem 1rem;
+    color: #1f2937;
+    text-align: left;
+    border: none;
+    resize: none;
+    scrollbar-width: none;
+  }
+
+  .create-memo-content::placeholder {
+    color: #6b7280;
+  }
+
+  /*
+  .create-memo-content:focus {
+    color: #6b7280;
+    border: #f3f4f6 1px solid;
+    box-shadow: inset 0 -1rem 1rem 0.2rem rgba(0, 0, 0, 0.1);
+  }
+  */
+
+  .create-memo-password {
+    font-family: 'MacSystemFont';
+    font-size: 2rem;
+    font-weight: 500;
+    height: 100%;
+    width: 100%;
+    justify-items: left;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #1f2937;
+    text-align: left;
+    border: none;
+    border-radius: 0.8rem;
+  }
+
+  .create-memo-password::placeholder {
+    font-size: 1rem;
+    color: #6b7280;
+  }
+
+  /*
+  .create-memo-password:focus {
+    color: #6b7280;
+    border: #f3f4f6 1px solid;
+    box-shadow: inset 0 -1rem 1rem 0.2rem rgba(0, 0, 0, 0.1);
+  }
+  */
+  
+/* 모달 오버레이 스타일 */
+/* Container를 기준으로 모달을 중앙에 배치 */
+.modal-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* 배경을 약간 어둡게 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* 모달 콘텐츠 스타일 */
+.modal-content {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 30%;
+  height: 40%;
+  min-width: 15rem;
+  min-height: 12rem;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  z-index: 1001;
+}
+
+/* 비밀번호 입력 필드 스타일 */
+.modal-content input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  margin: 1rem 0;
+  border: 1px solid #ccc;
+  border-radius: 0.8rem;
+  box-shadow: inset 0 0.2rem 1rem rgba(0, 0, 0, 0.1);
+}
+
+/* 모달 내 버튼 스타일 */
+.modal-content button {
+  padding: 0.5rem 1rem;
+  background-color: #edbb4d;
+  border: none;
+  border-radius: 0.8rem;
+  cursor: pointer;
+  font-size: 1rem;
+  color: white;
+  display: flex;
+}
+
+.modal-content button:hover {
+  background-color: #dca946;
+}
