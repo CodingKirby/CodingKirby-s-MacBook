@@ -45,7 +45,7 @@ const Safari: React.FC = () => {
   return (
     <Container title="Portfolio" appName="safari">
       <header>
-        <h1>김정현의 포트폴리오</h1>
+        <h1><strong>김정현의 포트폴리오</strong></h1>
         <p>안녕하세요, 늘 고민하는 개발자 김정현입니다.<br />제 프로젝트들을 소개합니다.</p>
       </header>
       <div className="projects">
