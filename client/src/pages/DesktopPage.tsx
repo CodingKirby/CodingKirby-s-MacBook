@@ -15,23 +15,20 @@ import Mail from '../components/apps/Mail';
 const DesktopPage = () => {
   return (
     <div style={{ display: 'flex' }}>
-    <AppStateProvider>
-        <MusicProvider>
-            <div className="App">
-            <StatusBar />
-            <MusicPlayer />
-            <Safari />
-            <MemoProvider>
-              <Memo />
-            </MemoProvider>
-            <Github />
-            <Blog />
-            <Mail />
-            <Dock />
-            </div>
-        </MusicProvider>
-      
-    </AppStateProvider>
+    <AppStateProvider><MusicProvider>
+      <div className="App">
+      <StatusBar />
+      <MusicPlayer />
+      <Safari />
+      <MemoProvider>
+        <Memo />
+      </MemoProvider>
+      <Github />
+      <Blog />
+      <Mail />
+      <Dock />
+      </div>
+    </MusicProvider></AppStateProvider>
     </div>
   );
 };
