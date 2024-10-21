@@ -61,10 +61,33 @@ const Memo: React.FC = () => {
   const handleCreateMemo = async () => {
     await createMemo();
   };
+
+  const handleAddTempMemo = () => {
+    setIsCreating(true);
+    const tempMemo = {
+      id: 0,
+      title: '새로운 메모',
+      content: '작성 중...',
+      date: new Date().toLocaleString(),
+      folder_id: selectedFolder,
+    };
+  
+    // 임시 메모를 최상단에 추가하면서 기존 메모들을 유지
+    setMemos((prevMemos) => {
+      // 고정 메모(id === 1)를 유지하고 임시 메모를 최상단에 추가
+      const fixedMemos = prevMemos.filter(memo => memo.id === 1);
+      const otherMemos = prevMemos.filter(memo => memo.id !== 1 && memo.id !== 0);
+      
+      // 임시 메모를 최상단에 추가하고 나머지 메모들을 뒤에 위치
+      return [tempMemo, ...fixedMemos, ...otherMemos];
+    });
+  
+    // 임시 메모를 선택
+    setSelectedMemo(tempMemo);
+  };  
   
   const handleScroll = (event: React.UIEvent<HTMLDivElement>) => setIsScrolled(event.currentTarget.scrollTop > 50);
 
-  // 앱이 실행 중이지 않거나 최소화된 경우에는 렌더링하지 않음
   if (!isRunning || isMinimized) return null;
 
   return (
@@ -97,8 +120,8 @@ const Memo: React.FC = () => {
         </div>
 
         <div className="memo-content" onScroll={handleScroll}>
-        <div className={`memo-tools ${isScrolled ? 'scrolled' : ''}`}
-        style={{ display: 'flex', justifyContent: 'space-between', padding: '0.5rem' }}>
+          <div className={`memo-tools ${isScrolled ? 'scrolled' : ''}`}
+          style={{ display: 'flex', justifyContent: 'space-between', padding: '0.5rem' }}>
             {isCreating ? (
               <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
                 <button onClick={handleResetMemo}>
@@ -124,12 +147,7 @@ const Memo: React.FC = () => {
                 </div>
                 <div>
                   <button><Share className='icon' /></button>
-                  <button onClick={() => {
-                    setIsCreating(true);
-                    const tempMemo = { id: 0, title: '새로운 메모', content: '작성 중...', date: new Date().toLocaleString(), folder_id: selectedFolder };
-                    setMemos([tempMemo, ...memos]);
-                    setSelectedMemo(tempMemo);
-                  }}>
+                  <button onClick={handleAddTempMemo}>
                     <PenBox className='icon' />
                   </button>
                 </div>

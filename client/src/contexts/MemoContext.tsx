@@ -195,12 +195,16 @@ export const MemoProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     return isInSelectedFolder && matchesSearchQuery(memo);
   })
   .sort((a, b) => {
-    // 1번 폴더에서 id가 1인 메모를 상단 고정
-    if (selectedFolder === 1) {
-      if (a.id === 1) return -1; // a가 id가 1인 메모인 경우 상단
-      if (b.id === 1) return 1;  // b가 id가 1인 메모인 경우 하단
-    }
-    return b.id - a.id; // 그 외 메모는 id 기준으로 내림차순 정렬
+    // 임시 메모(id === 0)를 항상 최상단에
+    if (a.id === 0) return -1;
+    if (b.id === 0) return 1;
+
+    // 고정 메모(id === 1)를 그 다음에 위치
+    if (a.id === 1) return -1;
+    if (b.id === 1) return 1;
+
+    // 그 외 메모는 id 기준으로 내림차순 정렬
+    return b.id - a.id;
   });
 
   return (
