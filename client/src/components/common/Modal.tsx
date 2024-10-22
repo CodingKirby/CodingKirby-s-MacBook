@@ -10,7 +10,7 @@ const Modal: React.FC<ModalProps> = ({ title, onClose, children }) => {
   return (
     <div className="modal-overlay">
       <div className="modal-content">
-        <h3>{title}</h3>
+        <h3><strong>{title}</strong></h3>
         {children}
       </div>
     </div>

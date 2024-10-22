@@ -100,12 +100,14 @@ export const MemoProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   // 메모 삭제
-  const deleteMemo = async (id: string, password: string) => {
+  const deleteMemo = async (id: string, password: string): Promise<boolean> => {
     try {
       await axios.delete(`/memos/${id}`, { data: { password } });
       fetchFoldersAndMemos();
+      return true;  // 성공 시 true 반환
     } catch (error) {
       console.error('Error deleting memo:', error);
+      return false;  // 실패 시 false 반환
     }
   };
 

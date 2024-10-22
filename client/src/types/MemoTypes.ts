@@ -33,7 +33,7 @@ export interface MemoContextProps {
   setNewMemo: React.Dispatch<React.SetStateAction<Memo>>;
   fetchFoldersAndMemos: () => Promise<void>;
   createMemo: () => Promise<void>;
-  deleteMemo: (id: string, password: string) => Promise<void>;
+  deleteMemo: (id: string, password: string) => Promise<boolean>;
   resetMemoState: () => void;
   resetMemoCreateState: () => void;
 
