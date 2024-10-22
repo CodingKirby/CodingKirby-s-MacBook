@@ -18,7 +18,7 @@ export const MemoProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     content: '작성 중...',
     password: '0000',
     folder_id: selectedFolder,
-    date: new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' }),
+    date: new Date().toLocaleString('ko-KR'),
     id: 0,
   });
 
@@ -34,7 +34,7 @@ export const MemoProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         .sort((a: Memo, b: Memo) => b.id - a.id)
         .map((memo: any) => ({
           ...memo,
-          date: new Date(memo.created_at).toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' }),
+          date: new Date(memo.created_at).toLocaleString('ko-KR'),
         }));
       setMemos(formattedMemos);
     } catch (error) {
@@ -54,7 +54,7 @@ export const MemoProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       content: '',
       password: '',
       folder_id: 1,
-      date: new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' }),
+      date: new Date().toLocaleString('ko-KR'),
       id: 0,
     });
     setMemos((prevMemos) => prevMemos.filter((memo) => memo.id !== 0));
@@ -72,7 +72,7 @@ export const MemoProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       content: '',
       password: '',
       folder_id: selectedFolder,
-      date: new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' }),
+      date: new Date().toLocaleString('ko-KR'),
       id: 0,
     });
   };
@@ -88,7 +88,7 @@ export const MemoProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       const createdMemo = {
         ...newMemo,
         id: response.data.memo.id,
-        date: new Date(response.data.memo.created_at).toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' }),
+        date: new Date(response.data.memo.created_at).toLocaleString('ko-KR'),
       };
       resetMemoCreateState();
       setMemos((prevMemos) => [createdMemo, ...prevMemos.filter((memo) => memo.id !== 0)]);
