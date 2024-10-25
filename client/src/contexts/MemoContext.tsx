@@ -85,6 +85,7 @@ export const MemoProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
     try {
       const response = await axios.post('/memos', { ...newMemo, folder_id: selectedFolder });
+      console.log('Memo created:', response.data.memo);
       const createdMemo = {
         ...newMemo,
         id: response.data.memo.id,
