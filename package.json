@@ -2,12 +2,11 @@
     "name": "kdt-portfolio",
     "version": "0.0.0",
     "scripts": {
-      "client": "npm start --prefix ./client",
-      "server": "npm start --prefix ./server",
-      "dev": "concurrently \"npm run server\" \"npm run client\""
+        "client": "npm start --prefix client",
+        "server": "npm run dev --prefix server",
+        "dev": "concurrently \"npm run server\" \"npm run client\""
     },
     "dependencies": {
-      "concurrently": "^6.0.0"
+        "concurrently": "^6.5.1"
     }
-  }
-  
+}

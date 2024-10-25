@@ -3,8 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "build": "tsc",
-    "start": "npm run build && node dist/bin/www.js"
+    "start": "npm run build && node dist/bin/www.js",
+    "dev": "nodemon index.js",
+    "build": "tsc"
   },
   "dependencies": {
     "@types/bcrypt": "^5.0.2",
@@ -18,7 +19,9 @@
     "http-errors": "~1.6.3",
     "jade": "~1.11.0",
     "morgan": "~1.9.1",
-    "mysql2": "^3.11.3"
+    "mysql2": "^3.11.3",
+    "tsc": "^2.0.4",
+    "typescript": "^5.6.3"
   },
   "devDependencies": {
     "@types/express": "^5.0.0",
